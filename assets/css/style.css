@@ -1,0 +1,257 @@
+/* Override Bootstrap primary color - NO BLUE/PURPLE */
+:root {
+    --bs-primary: #0d9488;
+    --bs-primary-rgb: 13, 148, 136;
+    --bs-primary-hover: #0f766e;
+    --bs-primary-active: #0d5f56;
+}
+
+/* Sidebar Styling */
+#wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    width: 250px;
+    background-color: #1f2937;
+    color: #f3f4f6;
+    transition: all 0.3s ease;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 1.5rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #374151;
+    background-color: #111827;
+}
+
+#sidebar-wrapper .list-group-item {
+    background-color: transparent;
+    color: #d1d5db;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.2s ease;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+    background-color: #374151;
+    color: #f3f4f6;
+    padding-left: 2rem;
+}
+
+#sidebar-wrapper .list-group-item.active {
+    background-color: var(--bs-primary);
+    color: white;
+    border-left: 4px solid #14b8a6;
+}
+
+#sidebar-wrapper .list-group-item.text-danger {
+    color: #f87171;
+}
+
+#sidebar-wrapper .list-group-item.text-danger:hover {
+    background-color: #374151;
+    color: #ef4444;
+}
+
+/* Collapsed Sidebar */
+#wrapper.toggled #sidebar-wrapper {
+    width: 70px;
+}
+
+#wrapper.toggled #sidebar-wrapper .sidebar-text {
+    display: none;
+}
+
+#wrapper.toggled #sidebar-wrapper .sidebar-heading {
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+#wrapper.toggled #sidebar-wrapper .list-group-item {
+    text-align: center;
+    padding: 0.75rem 0;
+    justify-content: center;
+}
+
+#wrapper.toggled #sidebar-wrapper .list-group-item i {
+    margin: 0 !important;
+    font-size: 1.25rem;
+}
+
+/* Page Content */
+#page-content-wrapper {
+    width: 100%;
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#sidebarToggle {
+    border: none;
+    color: #4b5563;
+    padding: 0.5rem;
+}
+
+#sidebarToggle:hover {
+    background-color: #f3f4f6;
+    color: var(--bs-primary);
+}
+
+/* Avatar */
+.rounded-circle {
+    object-fit: cover;
+}
+
+/* Cards */
+.card {
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+}
+
+/* Tables */
+.table {
+    background-color: white;
+}
+
+.table thead th {
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--bs-primary-hover);
+    border-color: var(--bs-primary-hover);
+}
+
+.btn-primary:focus {
+    background-color: var(--bs-primary-active);
+    border-color: var(--bs-primary-active);
+    box-shadow: 0 0 0 0.25rem rgba(13, 148, 136, 0.25);
+}
+
+/* Form Controls */
+.form-control:focus, .form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(13, 148, 136, 0.25);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        width: 0;
+        position: fixed;
+        z-index: 1000;
+        height: 100vh;
+        overflow-y: auto;
+    }
+    
+    #sidebar-wrapper.show {
+        width: 250px;
+    }
+    
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+    
+    #wrapper.toggled #sidebar-wrapper.show {
+        width: 250px;
+    }
+    
+    #page-content-wrapper {
+        margin-left: 0;
+    }
+    
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    
+    .overlay.show {
+        display: block;
+    }
+}
+
+/* Login Page Styles */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.login-header {
+    background-color: var(--bs-primary);
+    color: white;
+    border-radius: 0.5rem 0.5rem 0 0;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+/* Status Badges */
+.badge-active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Action Buttons */
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Avatar Upload Preview */
+.avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--bs-primary);
+}
