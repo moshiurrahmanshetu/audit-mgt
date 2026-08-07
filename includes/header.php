@@ -1,7 +1,12 @@
 <?php
-require_once __DIR__ . '/../config/constants.php';
+// Load config and functions if not already loaded (auth_check.php includes them)
+if (!defined('APP_NAME')) {
+    require_once __DIR__ . '/../config/constants.php';
+    require_once __DIR__ . '/functions.php';
+}
+
+// Load database connection
 require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/functions.php';
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {

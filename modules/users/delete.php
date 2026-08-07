@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../config/db.php';
+
+// Require Admin role
 requireRole(['Admin']);
 
 $user_id = intval($_GET['id'] ?? 0);

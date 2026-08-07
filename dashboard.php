@@ -23,12 +23,24 @@ $user = getCurrentUser();
                 </p>
                 <div class="alert alert-info">
                     <i class="bi bi-info-circle me-2"></i>
-                    <strong>Phase 1 Complete:</strong> Authentication and User Management system is now active.
+                    <strong>Phase 2 Complete:</strong> Audit Management system is now active.
                 </div>
             </div>
         </div>
         
         <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-clipboard-check me-2"></i>Audit Management</h5>
+                        <p class="card-text">Create and manage audit schedules and assignments.</p>
+                        <a href="<?php echo BASE_URL; ?>/modules/audits/list.php" class="btn btn-primary">
+                            Manage Audits
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
             <?php if (hasRole('Admin')): ?>
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
@@ -42,18 +54,6 @@ $user = getCurrentUser();
                 </div>
             </div>
             <?php endif; ?>
-            
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-person me-2"></i>My Profile</h5>
-                        <p class="card-text">View and update your profile information.</p>
-                        <a href="<?php echo BASE_URL; ?>/modules/users/profile.php" class="btn btn-primary">
-                            View Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     
@@ -87,7 +87,7 @@ $user = getCurrentUser();
             <div class="card-body">
                 <ul class="list-unstyled mb-0">
                     <li class="mb-2"><strong>Application:</strong> <?php echo APP_NAME; ?></li>
-                    <li class="mb-2"><strong>Version:</strong> Phase 1</li>
+                    <li class="mb-2"><strong>Version:</strong> Phase 2</li>
                     <li class="mb-0"><strong>Status:</strong> <span class="badge bg-success">Active</span></li>
                 </ul>
             </div>

@@ -13,6 +13,11 @@
             <span class="sidebar-text">Dashboard</span>
         </a>
         
+        <a href="<?php echo BASE_URL; ?>/modules/audits/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'audits') !== false ? 'active' : ''; ?>">
+            <i class="bi bi-clipboard-check me-2"></i>
+            <span class="sidebar-text">Audits</span>
+        </a>
+        
         <?php if (hasRole('Admin')): ?>
         <a href="<?php echo BASE_URL; ?>/modules/users/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'users/list.php') !== false ? 'active' : ''; ?>">
             <i class="bi bi-people me-2"></i>
@@ -31,3 +36,4 @@
         </a>
     </div>
 </div>
+

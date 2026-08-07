@@ -1,4 +1,9 @@
 <?php
+// Load constants if not already loaded
+if (!defined('APP_NAME')) {
+    require_once __DIR__ . '/../config/constants.php';
+}
+
 // Helper Functions
 
 // Sanitize input data
@@ -84,4 +89,22 @@ function isValidPassword($password) {
            preg_match('/[A-Z]/', $password) && 
            preg_match('/[a-z]/', $password) && 
            preg_match('/[0-9]/', $password);
+}
+
+// Require authentication
+function requireAuth() {
+    if (!isLoggedIn()) {
+        setFlashMessage('Please login to access this page.', 'danger');
+        redirect('/modules/auth/login.php');
+    }
+}
+
+// Require specific role
+function requireRole($roles) {
+    requireAuth();
+    
+    if (!hasAnyRole((array) $roles)) {
+        setFlashMessage('You do not have permission to access this page.', 'danger');
+        redirect('/dashboard.php');
+    }
 }

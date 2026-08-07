@@ -1,9 +1,11 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-requireRole(['Admin']);
 
 $pageTitle = 'Users';
 require_once __DIR__ . '/../../includes/header.php';
+
+// Require Admin role
+requireRole(['Admin']);
 
 try {
     // Get all users with their roles

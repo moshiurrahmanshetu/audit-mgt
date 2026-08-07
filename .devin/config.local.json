@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Exec(php)"
+      "Exec(php)",
+      "Exec(C:\\xampp\\mysql\\bin\\mysql.exe)",
+      "Exec(New-Item)"
     ]
   }
 }
