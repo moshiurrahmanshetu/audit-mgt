@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Application Constants
 define('APP_NAME', 'Audit Management CMS');
-define('BASE_URL', ''); // Empty for PHP built-in server testing
+define('BASE_URL', '/audit-mgt'); // Project path for XAMPP Apache server
 define('UPLOAD_PATH', __DIR__ . '/../uploads');
 define('AVATAR_PATH', UPLOAD_PATH . '/avatars');
 

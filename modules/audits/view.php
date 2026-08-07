@@ -45,6 +45,14 @@ try {
         'Completed' => 'bg-success'
     ];
     
+    // Get checklist statistics
+    $stmt = $pdo->prepare("SELECT response, COUNT(*) as count FROM audit_checklist WHERE audit_id = ? GROUP BY response");
+    $stmt->execute([$audit_id]);
+    $checklist_stats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    
+    $total_checklist_items = array_sum($checklist_stats);
+    $checklist_answered = ($checklist_stats['Yes'] ?? 0) + ($checklist_stats['No'] ?? 0) + ($checklist_stats['N/A'] ?? 0);
+    
 } catch (PDOException $e) {
     setFlashMessage('Error fetching audit data: ' . $e->getMessage(), 'danger');
     redirect('/modules/audits/list.php');
@@ -147,10 +155,35 @@ try {
             <div class="card-body">
                 <div class="tab-content" id="auditTabsContent">
                     <div class="tab-pane fade show active" id="checklist" role="tabpanel">
+                        <?php if ($total_checklist_items == 0): ?>
                         <div class="text-center py-5">
                             <i class="bi bi-list-check fs-1 text-muted"></i>
-                            <p class="text-muted mt-3">Checklist feature coming in Phase 3</p>
+                            <p class="text-muted mt-3">Checklist not yet started for this audit.</p>
+                            <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+                                <a href="<?php echo BASE_URL; ?>/modules/checklist/fill.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-2"></i>Start / Fill Checklist
+                                </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
+                        <?php else: ?>
+                        <div class="alert alert-info">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><strong>Progress:</strong> <?php echo $checklist_answered; ?> of <?php echo $total_checklist_items; ?> answered</span>
+                                <div class="btn-group btn-group-sm">
+                                    <span class="badge badge-active">Yes: <?php echo $checklist_stats['Yes'] ?? 0; ?></span>
+                                    <span class="badge badge-inactive">No: <?php echo $checklist_stats['No'] ?? 0; ?></span>
+                                    <span class="badge bg-secondary">N/A: <?php echo $checklist_stats['N/A'] ?? 0; ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="<?php echo BASE_URL; ?>/modules/checklist/fill.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                <i class="bi bi-pencil me-2"></i>View / Edit Checklist
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="tab-pane fade" id="findings" role="tabpanel">
                         <div class="text-center py-5">

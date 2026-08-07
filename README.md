@@ -1,14 +1,16 @@
-# Audit Management CMS - Phase 1
+# Audit Management CMS - Phase 3
 
 A simple, professional Audit Management Content Management System built with vanilla PHP, MySQL, and Bootstrap 5.
 
-## Phase 1 Features
+## Phase 3 Features
 
 - **Authentication System**: Secure login/logout with session management
 - **User Management**: Admin-only CRUD operations for users
 - **Role-Based Access Control**: Admin, Auditor, and Staff roles
 - **Profile Management**: Users can update their profile and avatar
 - **Password Management**: Secure password change functionality
+- **Audit Management**: Create, view, edit, and manage audits with role-based access
+- **Checklist Management**: Master checklist templates and audit-specific checklists
 - **Responsive Design**: Mobile-friendly with collapsible sidebar
 
 ## Tech Stack
@@ -24,7 +26,10 @@ A simple, professional Audit Management Content Management System built with van
 
 1. Open phpMyAdmin or your MySQL client
 2. Create a new database (or use existing)
-3. Import the SQL file: `database/01_users_roles.sql`
+3. Import the SQL files in order:
+   - `database/01_users_roles.sql`
+   - `database/02_audits.sql`
+   - `database/03_checklist.sql`
 4. This will create the necessary tables and seed data
 
 ### 2. Configure Database Connection
@@ -56,7 +61,7 @@ Ensure the following directories are writable by the web server:
 
 ### 5. Access the Application
 
-Open your browser and navigate to: `http://localhost/audit-cms`
+Open your browser and navigate to: `http://localhost/audit-mgt`
 
 ## Default Login Credentials
 
@@ -68,7 +73,7 @@ Open your browser and navigate to: `http://localhost/audit-cms`
 ## Project Structure
 
 ```
-/audit-cms
+/audit-mgt
   /config
     - db.php                # Database connection
     - constants.php         # Application constants
@@ -89,6 +94,8 @@ Open your browser and navigate to: `http://localhost/audit-cms`
     /avatars                # User uploaded avatars
   /database
     - 01_users_roles.sql   # Database schema and seed data
+    - 02_audits.sql        # Audit management schema
+    - 03_checklist.sql     # Checklist schema
   /modules
     /auth
       - login.php           # Login page
@@ -100,6 +107,15 @@ Open your browser and navigate to: `http://localhost/audit-cms`
       - delete.php          # Deactivate user (Admin only)
       - profile.php         # User profile
       - change-password.php # Change password
+    /audits
+      - list.php            # Audit list
+      - create.php          # Create audit (Admin/Auditor)
+      - edit.php            # Edit audit (Admin/Auditor)
+      - view.php            # View audit details
+      - delete.php          # Soft delete redirect
+    /checklist
+      - manage.php          # Manage checklist templates (Admin only)
+      - fill.php            # Fill audit checklist
   index.php                 # Entry point
   dashboard.php             # Main dashboard
   README.md                 # This file
@@ -115,9 +131,9 @@ Open your browser and navigate to: `http://localhost/audit-cms`
 
 ## User Roles
 
-1. **Admin**: Full access to all features including user management
-2. **Auditor**: Limited access (future phases will add audit-specific features)
-3. **Staff**: Limited access (future phases will add staff-specific features)
+1. **Admin**: Full access to all features including user management and audit management
+2. **Auditor**: Can create and manage audits assigned to them
+3. **Staff**: View-only access to audits where they are assigned as auditor
 
 ## Browser Compatibility
 
@@ -128,10 +144,8 @@ Open your browser and navigate to: `http://localhost/audit-cms`
 
 ## Future Phases
 
-This is Phase 1 of a 7-phase project. Future phases will include:
+This is Phase 3 of a 7-phase project. Future phases will include:
 
-- Phase 2: Audit Management
-- Phase 3: Audit Checklist
 - Phase 4: Findings & Issues
 - Phase 5: Documents / Evidence
 - Phase 6: Audit Review & Report
@@ -143,5 +157,5 @@ For issues or questions, please refer to the project documentation or contact th
 
 ---
 
-**Version**: Phase 1  
+**Version**: Phase 3  
 **Last Updated**: 2026-08-08
