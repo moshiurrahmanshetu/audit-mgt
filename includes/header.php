@@ -13,7 +13,25 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$currentUser = getCurrentUser();
+// Fresh DB lookup for current user to prevent stale session data after database resets
+$currentUser = null;
+if (isset($_SESSION['user_id'])) {
+    $navStmt = $pdo->prepare("SELECT u.id, u.full_name, u.username, u.email, u.avatar, r.role_name as role 
+                              FROM users u 
+                              JOIN roles r ON u.role_id = r.id 
+                              WHERE u.id = :id AND u.status = 'active'");
+    $navStmt->execute(['id' => $_SESSION['user_id']]);
+    $currentUser = $navStmt->fetch(PDO::FETCH_ASSOC);
+    
+    // If user no longer exists or is inactive (e.g., after database reset), force logout
+    if (!$currentUser) {
+        session_unset();
+        session_destroy();
+        header('Location: ' . BASE_URL . '/modules/auth/login.php?msg=session_expired');
+        exit;
+    }
+}
+
 $flash = getFlashMessage();
 ?>
 <!DOCTYPE html>
@@ -57,7 +75,7 @@ $flash = getFlashMessage();
                             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <img src="<?php echo getAvatarUrl($currentUser['avatar'] ?? ''); ?>" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
                                 <span class="d-none d-md-inline text-dark">
-                                    <?php echo htmlspecialchars($currentUser['name'] ?? ''); ?>
+                                    <?php echo htmlspecialchars($currentUser['full_name'] ?? ''); ?>
                                     <small class="text-muted d-block" style="font-size: 0.75rem;"><?php echo htmlspecialchars($currentUser['role'] ?? ''); ?></small>
                                 </span>
                             </a>

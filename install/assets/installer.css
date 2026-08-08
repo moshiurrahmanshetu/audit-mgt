@@ -1,0 +1,330 @@
+/* Installer Styles - Self-contained, no dependencies */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #e2e8f0;
+}
+
+.installer-container {
+    width: 100%;
+    max-width: 700px;
+    background: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.installer-header {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    padding: 30px;
+    text-align: center;
+    border-bottom: 2px solid #475569;
+}
+
+.installer-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+}
+
+.installer-header p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.step.active {
+    color: #10b981;
+}
+
+.step.completed {
+    color: #10b981;
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.step.active .step-number {
+    background: #10b981;
+    color: #0f172a;
+}
+
+.step.completed .step-number {
+    background: #10b981;
+    color: #0f172a;
+}
+
+.installer-body {
+    padding: 40px 30px;
+}
+
+.requirements-list {
+    list-style: none;
+    margin: 20px 0;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #334155;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.requirement-item.pass {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 3px solid #10b981;
+}
+
+.requirement-item.fail {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid #ef4444;
+}
+
+.requirement-icon {
+    font-size: 18px;
+}
+
+.requirement-icon.pass {
+    color: #10b981;
+}
+
+.requirement-icon.fail {
+    color: #ef4444;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #cbd5e1;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #10b981;
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+}
+
+.form-help {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 6px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #10b981;
+    color: #0f172a;
+}
+
+.btn-primary:hover {
+    background: #059669;
+}
+
+.btn-primary:disabled {
+    background: #475569;
+    cursor: not-allowed;
+    color: #94a3b8;
+}
+
+.btn-secondary {
+    background: #475569;
+    color: #f1f5f9;
+}
+
+.btn-secondary:hover {
+    background: #64748b;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.alert {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+    color: #10b981;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
+}
+
+.alert-info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #0f172a;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.installer-footer {
+    text-align: center;
+    padding: 20px;
+    background: #0f172a;
+    border-top: 1px solid #334155;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.success-icon {
+    font-size: 64px;
+    color: #10b981;
+    margin-bottom: 20px;
+}
+
+.security-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid #f59e0b;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.security-warning h3 {
+    color: #f59e0b;
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.security-warning p {
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.already-installed {
+    text-align: center;
+    padding: 60px 30px;
+}
+
+.already-installed h2 {
+    color: #ef4444;
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.already-installed p {
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.code-block {
+    background: #0f172a;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 8px 0;
+    word-break: break-all;
+}

@@ -26,5 +26,4 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect to login page
-header("Location: " . BASE_URL . "/modules/auth/login.php");
-exit();
+redirect('/modules/auth/login.php');

@@ -8,7 +8,16 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Application Constants
 define('APP_NAME', 'Audit Management CMS');
-define('BASE_URL', '/audit-mgt'); // Project path for XAMPP Apache server
+
+// Dynamic BASE_URL - auto-detects project root from filesystem path
+if (!defined('BASE_URL')) {
+    $projectRoot = dirname(__DIR__); // /config/../ = project root
+    $documentRoot = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '/');
+    $projectRootNormalized = rtrim(str_replace('\\', '/', $projectRoot), '/');
+    $basePath = str_replace($documentRoot, '', $projectRootNormalized);
+    define('BASE_URL', $basePath); // Will be '' if at domain root, or '/subfolder' if in subdirectory
+}
+
 define('UPLOAD_PATH', __DIR__ . '/../uploads');
 define('AVATAR_PATH', UPLOAD_PATH . '/avatars');
 define('DOCUMENTS_PATH', UPLOAD_PATH . '/documents');

@@ -10,8 +10,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     // Should never happen, but handle gracefully instead of continuing with broken data
-    header('Location: ' . BASE_URL . '/modules/auth/login.php');
-    exit;
+    redirect('/modules/auth/login.php');
 }
 
 $error = '';
