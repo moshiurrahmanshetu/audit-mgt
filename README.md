@@ -1,8 +1,8 @@
-# Audit Management CMS - Phase 5
+# Audit Management CMS - Phase 6
 
 A simple, professional Audit Management Content Management System built with vanilla PHP, MySQL, and Bootstrap 5.
 
-## Phase 5 Features
+## Phase 6 Features
 
 - **Authentication System**: Secure login/logout with session management
 - **User Management**: Admin-only CRUD operations for users
@@ -13,6 +13,7 @@ A simple, professional Audit Management Content Management System built with van
 - **Checklist Management**: Master checklist templates and audit-specific checklists
 - **Findings & Issues**: Create, track, resolve, and close audit findings with role-based workflow
 - **Documents / Evidence**: Upload, view, download, and manage audit evidence documents with secure file handling
+- **Audit Review & Report**: Admin can review audits, add comments/remarks, and complete/close audits with printable reports
 - **Responsive Design**: Mobile-friendly with collapsible sidebar
 
 ## Tech Stack
@@ -34,6 +35,7 @@ A simple, professional Audit Management Content Management System built with van
    - `database/03_checklist.sql`
    - `database/04_findings.sql`
    - `database/05_documents.sql`
+   - `database/06_review.sql`
 4. This will create the necessary tables and seed data
 
 ### 2. Configure Database Connection
@@ -103,6 +105,7 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
     - 03_checklist.sql     # Checklist schema
     - 04_findings.sql      # Findings schema
     - 05_documents.sql     # Documents schema
+    - 06_review.sql        # Review schema (ALTER TABLE)
   /modules
     /auth
       - login.php           # Login page
@@ -135,6 +138,9 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
       - upload.php          # Upload document
       - view.php            # View/download document
       - delete.php          # Delete document
+    /review
+      - review.php          # Review audit (Admin only)
+      - report.php          # View/print audit report
   index.php                 # Entry point
   dashboard.php             # Main dashboard
   README.md                 # This file
@@ -163,9 +169,8 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
 
 ## Future Phases
 
-This is Phase 5 of a 7-phase project. Future phases will include:
+This is Phase 6 of a 7-phase project. Future phases will include:
 
-- Phase 6: Audit Review & Report
 - Phase 7: Dashboard & Activity Log
 
 ## Support
@@ -174,5 +179,5 @@ For issues or questions, please refer to the project documentation or contact th
 
 ---
 
-**Version**: Phase 5  
+**Version**: Phase 6  
 **Last Updated**: 2026-08-08

@@ -19,10 +19,12 @@ try {
     // Get audit data
     $stmt = $pdo->prepare("SELECT a.*, 
                           u1.full_name as auditor_name, 
-                          u2.full_name as created_by_name 
+                          u2.full_name as created_by_name,
+                          u3.full_name as reviewed_by_name
                           FROM audits a 
                           LEFT JOIN users u1 ON a.auditor_id = u1.id 
                           LEFT JOIN users u2 ON a.created_by = u2.id 
+                          LEFT JOIN users u3 ON a.reviewed_by = u3.id
                           WHERE a.id = ?");
     $stmt->execute([$audit_id]);
     $audit = $stmt->fetch();
@@ -121,6 +123,20 @@ try {
             </a>
             <?php endif; ?>
         <?php endif; ?>
+        
+        <?php if (hasRole('Admin')): ?>
+        <a href="<?php echo BASE_URL; ?>/modules/review/review.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-outline-secondary">
+            <i class="bi bi-clipboard-check me-2"></i>Review Audit
+        </a>
+        <?php endif; ?>
+        
+        <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+            <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+        <a href="<?php echo BASE_URL; ?>/modules/review/report.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-outline-secondary" target="_blank">
+            <i class="bi bi-printer me-2"></i>View Report
+        </a>
+            <?php endif; ?>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -175,6 +191,31 @@ try {
                 <div class="mt-3">
                     <strong>Description:</strong>
                     <div class="mt-1"><?php echo nl2br(htmlspecialchars($audit['description'])); ?></div>
+                </div>
+                <?php endif; ?>
+                
+                <?php if ($audit['status'] === 'Completed' && ($audit['auditor_comments'] || $audit['final_remarks'] || $audit['reviewed_by'])): ?>
+                <hr>
+                <div class="mt-3">
+                    <strong><i class="bi bi-clipboard-check me-2"></i>Review Summary</strong>
+                    <?php if ($audit['reviewed_by']): ?>
+                    <div class="mt-2">
+                        <strong>Reviewed By:</strong> <?php echo htmlspecialchars($audit['reviewed_by_name'] ?? 'Unknown'); ?> | 
+                        <strong>Reviewed At:</strong> <?php echo formatDate($audit['reviewed_at'], 'M d, Y H:i'); ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($audit['auditor_comments']): ?>
+                    <div class="mt-2">
+                        <strong>Auditor Comments:</strong>
+                        <div class="mt-1"><?php echo nl2br(htmlspecialchars($audit['auditor_comments'])); ?></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($audit['final_remarks']): ?>
+                    <div class="mt-2">
+                        <strong>Final Remarks:</strong>
+                        <div class="mt-1"><?php echo nl2br(htmlspecialchars($audit['final_remarks'])); ?></div>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
             </div>
