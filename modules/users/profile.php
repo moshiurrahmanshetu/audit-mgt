@@ -1,23 +1,12 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'My Profile';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $user_id = $_SESSION['user_id'];
 $error = '';
-$success = '';
 
-try {
-    // Get current user data with role
-    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
-    $stmt->execute([$user_id]);
-    $user = $stmt->fetch();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching profile: ' . $e->getMessage(), 'danger');
-    redirect('/dashboard.php');
-}
-
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = sanitize($_POST['full_name'] ?? '');
     $email = sanitize($_POST['email'] ?? '');
@@ -84,8 +73,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'My Profile';
+require_once __DIR__ . '/../../includes/header.php';
+
+try {
+    // Get current user data with role
+    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching profile: ' . $e->getMessage(), 'danger');
+    redirect('/dashboard.php');
+}
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-person me-2"></i>My Profile</h2>
 </div>

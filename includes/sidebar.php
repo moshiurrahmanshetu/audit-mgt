@@ -18,6 +18,11 @@
             <span class="sidebar-text">Audits</span>
         </a>
         
+        <a href="<?php echo BASE_URL; ?>/modules/findings/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'findings') !== false ? 'active' : ''; ?>">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span class="sidebar-text">Findings</span>
+        </a>
+        
         <?php if (hasRole('Admin')): ?>
         <a href="<?php echo BASE_URL; ?>/modules/users/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'users/list.php') !== false ? 'active' : ''; ?>">
             <i class="bi bi-people me-2"></i>

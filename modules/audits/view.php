@@ -53,6 +53,16 @@ try {
     $total_checklist_items = array_sum($checklist_stats);
     $checklist_answered = ($checklist_stats['Yes'] ?? 0) + ($checklist_stats['No'] ?? 0) + ($checklist_stats['N/A'] ?? 0);
     
+    // Get findings statistics
+    $stmt = $pdo->prepare("SELECT status, COUNT(*) as count FROM findings WHERE audit_id = ? GROUP BY status");
+    $stmt->execute([$audit_id]);
+    $findings_stats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    
+    $total_findings = array_sum($findings_stats);
+    $findings_open = $findings_stats['Open'] ?? 0;
+    $findings_resolved = $findings_stats['Resolved'] ?? 0;
+    $findings_closed = $findings_stats['Closed'] ?? 0;
+    
 } catch (PDOException $e) {
     setFlashMessage('Error fetching audit data: ' . $e->getMessage(), 'danger');
     redirect('/modules/audits/list.php');
@@ -186,10 +196,85 @@ try {
                         <?php endif; ?>
                     </div>
                     <div class="tab-pane fade" id="findings" role="tabpanel">
+                        <?php if ($total_findings == 0): ?>
                         <div class="text-center py-5">
-                            <i class="bi bi-exclamation-triangle fs-1 text-muted"></i>
-                            <p class="text-muted mt-3">Findings & Issues feature coming in Phase 4</p>
+                            <i class="bi bi-check-circle fs-1 text-muted"></i>
+                            <p class="text-muted mt-3">No findings for this audit yet.</p>
+                            <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+                                <a href="<?php echo BASE_URL; ?>/modules/findings/create.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-2"></i>Add Finding
+                                </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
+                        <?php else: ?>
+                        <div class="alert alert-info">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><strong>Total:</strong> <?php echo $total_findings; ?> findings</span>
+                                <div class="btn-group btn-group-sm">
+                                    <span class="badge badge-inactive">Open: <?php echo $findings_open; ?></span>
+                                    <span class="badge badge-active">Resolved: <?php echo $findings_resolved; ?></span>
+                                    <span class="badge bg-secondary">Closed: <?php echo $findings_closed; ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <?php
+                        // Get findings for this audit
+                        $stmt = $pdo->prepare("SELECT f.*, u.full_name as responsible_name FROM findings f LEFT JOIN users u ON f.responsible_user_id = u.id WHERE f.audit_id = ? ORDER BY f.created_at DESC LIMIT 5");
+                        $stmt->execute([$audit_id]);
+                        $recent_findings = $stmt->fetchAll();
+                        ?>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Severity</th>
+                                        <th>Responsible</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_findings as $f): ?>
+                                    <tr>
+                                        <td>
+                                            <a href="<?php echo BASE_URL; ?>/modules/findings/view.php?id=<?php echo $f['id']; ?>" class="text-decoration-none">
+                                                <?php echo htmlspecialchars($f['finding_title']); ?>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge <?php echo $f['severity'] === 'High' ? 'badge-inactive' : ($f['severity'] === 'Medium' ? 'bg-warning' : 'badge-active'); ?>">
+                                                <?php echo htmlspecialchars($f['severity']); ?>
+                                            </span>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($f['responsible_name'] ?? 'Unassigned'); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo $f['status'] === 'Open' ? 'badge-inactive' : ($f['status'] === 'Resolved' ? 'badge-active' : 'bg-secondary'); ?>">
+                                                <?php echo htmlspecialchars($f['status']); ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+                                <a href="<?php echo BASE_URL; ?>/modules/findings/create.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-2"></i>Add Finding
+                                </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <a href="<?php echo BASE_URL; ?>/modules/findings/list.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-outline-secondary">
+                                <i class="bi bi-list me-2"></i>View All Findings
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="tab-pane fade" id="documents" role="tabpanel">
                         <div class="text-center py-5">

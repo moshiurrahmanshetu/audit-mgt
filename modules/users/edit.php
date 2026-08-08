@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Edit User';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // Require Admin role
 requireRole(['Admin']);
@@ -10,30 +9,13 @@ requireRole(['Admin']);
 $user_id = intval($_GET['id'] ?? 0);
 $error = '';
 
+// Handle GET validation and redirects FIRST
 if ($user_id <= 0) {
     setFlashMessage('Invalid user ID.', 'danger');
     redirect('/modules/users/list.php');
 }
 
-try {
-    // Get user data
-    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
-    $stmt->execute([$user_id]);
-    $user = $stmt->fetch();
-    
-    if (!$user) {
-        setFlashMessage('User not found.', 'danger');
-        redirect('/modules/users/list.php');
-    }
-    
-    // Get all roles
-    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
-    $roles = $stmt->fetchAll();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching user data: ' . $e->getMessage(), 'danger');
-    redirect('/modules/users/list.php');
-}
-
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = sanitize($_POST['full_name'] ?? '');
     $email = sanitize($_POST['email'] ?? '');
@@ -77,8 +59,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Edit User';
+require_once __DIR__ . '/../../includes/header.php';
+
+try {
+    // Get user data
+    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
+    
+    if (!$user) {
+        setFlashMessage('User not found.', 'danger');
+        redirect('/modules/users/list.php');
+    }
+    
+    // Get all roles
+    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
+    $roles = $stmt->fetchAll();
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching user data: ' . $e->getMessage(), 'danger');
+    redirect('/modules/users/list.php');
+}
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-pencil me-2"></i>Edit User</h2>
     <a href="<?php echo BASE_URL; ?>/modules/users/list.php" class="btn btn-outline-secondary">

@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Edit Audit';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // TODO: log activity in Phase 7
 
@@ -12,6 +11,7 @@ requireRole(['Admin', 'Auditor']);
 $audit_id = intval($_GET['id'] ?? 0);
 $error = '';
 
+// Handle GET validation and redirects FIRST
 if ($audit_id <= 0) {
     setFlashMessage('Invalid audit ID.', 'danger');
     redirect('/modules/audits/list.php');
@@ -19,40 +19,10 @@ if ($audit_id <= 0) {
 
 $user = getCurrentUser();
 
-try {
-    // Get audit data
-    $stmt = $pdo->prepare("SELECT a.*, u1.full_name as auditor_name, u2.full_name as created_by_name 
-                          FROM audits a 
-                          LEFT JOIN users u1 ON a.auditor_id = u1.id 
-                          LEFT JOIN users u2 ON a.created_by = u2.id 
-                          WHERE a.id = ?");
-    $stmt->execute([$audit_id]);
-    $audit = $stmt->fetch();
-    
-    if (!$audit) {
-        setFlashMessage('Audit not found.', 'danger');
-        redirect('/modules/audits/list.php');
-    }
-    
-    // Check access: Admin can edit any, Auditor can only edit assigned audits
-    if ($user['role'] === 'Auditor' && $audit['auditor_id'] != $user['id']) {
-        setFlashMessage('You can only edit audits assigned to you.', 'danger');
-        redirect('/modules/audits/list.php');
-    }
-    
-    // Get active auditors for dropdown
-    $stmt = $pdo->prepare("SELECT u.id, u.full_name FROM users u JOIN roles r ON u.role_id = r.id WHERE r.role_name = 'Auditor' AND u.status = 'active' ORDER BY u.full_name");
-    $stmt->execute();
-    $auditors = $stmt->fetchAll();
-    
-    // Define departments
-    $departments = ['Finance', 'HR', 'IT', 'Operations', 'Marketing', 'Sales', 'Legal', 'Compliance'];
-    
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching audit data: ' . $e->getMessage(), 'danger');
-    redirect('/modules/audits/list.php');
-}
+// Define departments
+$departments = ['Finance', 'HR', 'IT', 'Operations', 'Marketing', 'Sales', 'Legal', 'Compliance'];
 
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title'] ?? '');
     $department = sanitize($_POST['department'] ?? '');
@@ -83,8 +53,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Edit Audit';
+require_once __DIR__ . '/../../includes/header.php';
+
+try {
+    // Get audit data
+    $stmt = $pdo->prepare("SELECT a.*, u1.full_name as auditor_name, u2.full_name as created_by_name 
+                          FROM audits a 
+                          LEFT JOIN users u1 ON a.auditor_id = u1.id 
+                          LEFT JOIN users u2 ON a.created_by = u2.id 
+                          WHERE a.id = ?");
+    $stmt->execute([$audit_id]);
+    $audit = $stmt->fetch();
+    
+    if (!$audit) {
+        setFlashMessage('Audit not found.', 'danger');
+        redirect('/modules/audits/list.php');
+    }
+    
+    // Check access: Admin can edit any, Auditor can only edit assigned audits
+    if ($user['role'] === 'Auditor' && $audit['auditor_id'] != $user['id']) {
+        setFlashMessage('You can only edit audits assigned to you.', 'danger');
+        redirect('/modules/audits/list.php');
+    }
+    
+    // Get active auditors for dropdown
+    $stmt = $pdo->prepare("SELECT u.id, u.full_name FROM users u JOIN roles r ON u.role_id = r.id WHERE r.role_name = 'Auditor' AND u.status = 'active' ORDER BY u.full_name");
+    $stmt->execute();
+    $auditors = $stmt->fetchAll();
+    
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching audit data: ' . $e->getMessage(), 'danger');
+    redirect('/modules/audits/list.php');
+}
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-pencil me-2"></i>Edit Audit</h2>
     <a href="<?php echo BASE_URL; ?>/modules/audits/list.php" class="btn btn-outline-secondary">

@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Create Audit';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // TODO: log activity in Phase 7
 
@@ -10,21 +9,11 @@ require_once __DIR__ . '/../../includes/header.php';
 requireRole(['Admin', 'Auditor']);
 
 $error = '';
-$success = '';
 
 // Define departments
 $departments = ['Finance', 'HR', 'IT', 'Operations', 'Marketing', 'Sales', 'Legal', 'Compliance'];
 
-try {
-    // Get active auditors for dropdown
-    $stmt = $pdo->prepare("SELECT u.id, u.full_name FROM users u JOIN roles r ON u.role_id = r.id WHERE r.role_name = 'Auditor' AND u.status = 'active' ORDER BY u.full_name");
-    $stmt->execute();
-    $auditors = $stmt->fetchAll();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching auditors: ' . $e->getMessage(), 'danger');
-    $auditors = [];
-}
-
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title'] ?? '');
     $department = sanitize($_POST['department'] ?? '');
@@ -63,8 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Create Audit';
+require_once __DIR__ . '/../../includes/header.php';
+
+try {
+    // Get active auditors for dropdown
+    $stmt = $pdo->prepare("SELECT u.id, u.full_name FROM users u JOIN roles r ON u.role_id = r.id WHERE r.role_name = 'Auditor' AND u.status = 'active' ORDER BY u.full_name");
+    $stmt->execute();
+    $auditors = $stmt->fetchAll();
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching auditors: ' . $e->getMessage(), 'danger');
+    $auditors = [];
+}
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-plus-circle me-2"></i>Create New Audit</h2>
     <a href="<?php echo BASE_URL; ?>/modules/audits/list.php" class="btn btn-outline-secondary">

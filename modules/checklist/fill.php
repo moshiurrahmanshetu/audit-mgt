@@ -1,15 +1,14 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Fill Audit Checklist';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // TODO: log activity in Phase 7
 
 $audit_id = intval($_GET['audit_id'] ?? 0);
 $error = '';
-$success = '';
 
+// Handle GET validation and redirects FIRST
 if ($audit_id <= 0) {
     setFlashMessage('Invalid audit ID.', 'danger');
     redirect('/modules/audits/list.php');
@@ -73,7 +72,7 @@ try {
     redirect('/modules/audits/list.php');
 }
 
-// Handle form submission
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && hasAnyRole(['Admin', 'Auditor'])) {
     $responses = $_POST['response'] ?? [];
     $notes = $_POST['note'] ?? [];
@@ -99,8 +98,11 @@ $can_edit = hasAnyRole(['Admin', 'Auditor']);
 if ($user['role'] === 'Auditor' && $audit['auditor_id'] != $user['id']) {
     $can_edit = false;
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Fill Audit Checklist';
+require_once __DIR__ . '/../../includes/header.php';
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-list-check me-2"></i>Audit Checklist</h2>
     <div>

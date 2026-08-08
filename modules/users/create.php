@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Create User';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // Require Admin role
 requireRole(['Admin']);
@@ -10,15 +9,7 @@ requireRole(['Admin']);
 $error = '';
 $success = '';
 
-try {
-    // Get all roles
-    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
-    $roles = $stmt->fetchAll();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching roles: ' . $e->getMessage(), 'danger');
-    $roles = [];
-}
-
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = sanitize($_POST['full_name'] ?? '');
     $username = sanitize($_POST['username'] ?? '');
@@ -67,8 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Create User';
+require_once __DIR__ . '/../../includes/header.php';
+
+try {
+    // Get all roles
+    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
+    $roles = $stmt->fetchAll();
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching roles: ' . $e->getMessage(), 'danger');
+    $roles = [];
+}
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-person-plus me-2"></i>Create New User</h2>
     <a href="<?php echo BASE_URL; ?>/modules/users/list.php" class="btn btn-outline-secondary">

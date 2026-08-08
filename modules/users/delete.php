@@ -1,12 +1,16 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../config/db.php';
+
+// TODO: log activity in Phase 7
 
 // Require Admin role
 requireRole(['Admin']);
 
 $user_id = intval($_GET['id'] ?? 0);
 
+// Handle GET validation and redirect FIRST
 if ($user_id <= 0) {
     setFlashMessage('Invalid user ID.', 'danger');
     redirect('/modules/users/list.php');

@@ -8,3 +8,7 @@
     <script src="<?php echo BASE_URL; ?>/assets/js/script.js"></script>
 </body>
 </html>
+<?php
+// End output buffering (safety net for redirect errors)
+ob_end_flush();
+

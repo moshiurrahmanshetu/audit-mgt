@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-
-$pageTitle = 'Change Password';
-require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $user_id = $_SESSION['user_id'];
 $error = '';
@@ -17,6 +16,7 @@ try {
     redirect('/dashboard.php');
 }
 
+// Handle POST logic FIRST, before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $current_password = $_POST['current_password'] ?? '';
     $new_password = $_POST['new_password'] ?? '';
@@ -47,8 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Only AFTER all possible redirects, include header and render HTML
+$pageTitle = 'Change Password';
+require_once __DIR__ . '/../../includes/header.php';
+?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-key me-2"></i>Change Password</h2>
     <a href="<?php echo BASE_URL; ?>/modules/users/profile.php" class="btn btn-outline-secondary">
