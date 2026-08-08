@@ -23,7 +23,7 @@ $user = getCurrentUser();
                 </p>
                 <div class="alert alert-info">
                     <i class="bi bi-info-circle me-2"></i>
-                    <strong>Phase 4 Complete:</strong> Findings & Issues system is now active.
+                    <strong>Phase 5 Complete:</strong> Documents / Evidence system is now active.
                 </div>
             </div>
         </div>
@@ -48,6 +48,18 @@ $user = getCurrentUser();
                         <p class="card-text">View and manage audit findings and issues.</p>
                         <a href="<?php echo BASE_URL; ?>/modules/findings/list.php" class="btn btn-primary">
                             View Findings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-folder me-2"></i>Documents</h5>
+                        <p class="card-text">Upload and manage audit evidence documents.</p>
+                        <a href="<?php echo BASE_URL; ?>/modules/documents/list.php" class="btn btn-primary">
+                            View Documents
                         </a>
                     </div>
                 </div>
@@ -127,7 +139,7 @@ $user = getCurrentUser();
             <div class="card-body">
                 <ul class="list-unstyled mb-0">
                     <li class="mb-2"><strong>Application:</strong> <?php echo APP_NAME; ?></li>
-                    <li class="mb-2"><strong>Version:</strong> Phase 4</li>
+                    <li class="mb-2"><strong>Version:</strong> Phase 5</li>
                     <li class="mb-0"><strong>Status:</strong> <span class="badge bg-success">Active</span></li>
                 </ul>
             </div>

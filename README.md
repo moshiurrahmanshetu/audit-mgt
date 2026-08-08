@@ -1,8 +1,8 @@
-# Audit Management CMS - Phase 4
+# Audit Management CMS - Phase 5
 
 A simple, professional Audit Management Content Management System built with vanilla PHP, MySQL, and Bootstrap 5.
 
-## Phase 4 Features
+## Phase 5 Features
 
 - **Authentication System**: Secure login/logout with session management
 - **User Management**: Admin-only CRUD operations for users
@@ -12,6 +12,7 @@ A simple, professional Audit Management Content Management System built with van
 - **Audit Management**: Create, view, edit, and manage audits with role-based access
 - **Checklist Management**: Master checklist templates and audit-specific checklists
 - **Findings & Issues**: Create, track, resolve, and close audit findings with role-based workflow
+- **Documents / Evidence**: Upload, view, download, and manage audit evidence documents with secure file handling
 - **Responsive Design**: Mobile-friendly with collapsible sidebar
 
 ## Tech Stack
@@ -32,6 +33,7 @@ A simple, professional Audit Management Content Management System built with van
    - `database/02_audits.sql`
    - `database/03_checklist.sql`
    - `database/04_findings.sql`
+   - `database/05_documents.sql`
 4. This will create the necessary tables and seed data
 
 ### 2. Configure Database Connection
@@ -94,11 +96,13 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
       - default-avatar.png  # Default user avatar
   /uploads
     /avatars                # User uploaded avatars
+    /documents              # Audit evidence documents
   /database
     - 01_users_roles.sql   # Database schema and seed data
     - 02_audits.sql        # Audit management schema
     - 03_checklist.sql     # Checklist schema
     - 04_findings.sql      # Findings schema
+    - 05_documents.sql     # Documents schema
   /modules
     /auth
       - login.php           # Login page
@@ -126,6 +130,11 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
       - view.php            # View finding details
       - resolve.php         # Resolve finding
       - close.php           # Close finding
+    /documents
+      - list.php            # Documents list
+      - upload.php          # Upload document
+      - view.php            # View/download document
+      - delete.php          # Delete document
   index.php                 # Entry point
   dashboard.php             # Main dashboard
   README.md                 # This file
@@ -154,9 +163,8 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
 
 ## Future Phases
 
-This is Phase 4 of a 7-phase project. Future phases will include:
+This is Phase 5 of a 7-phase project. Future phases will include:
 
-- Phase 5: Documents / Evidence
 - Phase 6: Audit Review & Report
 - Phase 7: Dashboard & Activity Log
 
@@ -166,5 +174,5 @@ For issues or questions, please refer to the project documentation or contact th
 
 ---
 
-**Version**: Phase 4  
+**Version**: Phase 5  
 **Last Updated**: 2026-08-08

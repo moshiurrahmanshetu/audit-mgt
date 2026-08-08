@@ -45,6 +45,38 @@ try {
         'Completed' => 'bg-success'
     ];
     
+    // Helper function to get file icon based on type
+    function getFileIcon($file_type) {
+        $file_type = strtolower($file_type);
+        switch ($file_type) {
+            case 'pdf':
+                return 'bi-file-earmark-pdf';
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+                return 'bi-file-earmark-image';
+            case 'xlsx':
+            case 'xls':
+                return 'bi-file-earmark-excel';
+            case 'docx':
+            case 'doc':
+                return 'bi-file-earmark-word';
+            default:
+                return 'bi-file-earmark';
+        }
+    }
+    
+    // Helper function to format file size
+    function formatFileSize($bytes) {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } else {
+            return $bytes . ' bytes';
+        }
+    }
+    
     // Get checklist statistics
     $stmt = $pdo->prepare("SELECT response, COUNT(*) as count FROM audit_checklist WHERE audit_id = ? GROUP BY response");
     $stmt->execute([$audit_id]);
@@ -62,6 +94,13 @@ try {
     $findings_open = $findings_stats['Open'] ?? 0;
     $findings_resolved = $findings_stats['Resolved'] ?? 0;
     $findings_closed = $findings_stats['Closed'] ?? 0;
+    
+    // Get documents
+    $stmt = $pdo->prepare("SELECT d.*, u.full_name as uploaded_by_name FROM documents d LEFT JOIN users u ON d.uploaded_by = u.id WHERE d.audit_id = ? ORDER BY d.upload_date DESC");
+    $stmt->execute([$audit_id]);
+    $documents = $stmt->fetchAll();
+    
+    $total_documents = count($documents);
     
 } catch (PDOException $e) {
     setFlashMessage('Error fetching audit data: ' . $e->getMessage(), 'danger');
@@ -277,10 +316,79 @@ try {
                         <?php endif; ?>
                     </div>
                     <div class="tab-pane fade" id="documents" role="tabpanel">
+                        <?php if ($total_documents == 0): ?>
                         <div class="text-center py-5">
-                            <i class="bi bi-file-earmark fs-1 text-muted"></i>
-                            <p class="text-muted mt-3">Documents & Evidence feature coming in Phase 5</p>
+                            <i class="bi bi-folder-x fs-1 text-muted"></i>
+                            <p class="text-muted mt-3">No documents uploaded for this audit yet.</p>
+                            <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+                                <a href="<?php echo BASE_URL; ?>/modules/documents/upload.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                    <i class="bi bi-cloud-upload me-2"></i>Upload Document
+                                </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
+                        <?php else: ?>
+                        <div class="alert alert-info">
+                            <strong>Total:</strong> <?php echo $total_documents; ?> documents
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Document Name</th>
+                                        <th>Type</th>
+                                        <th>Size</th>
+                                        <th>Uploaded By</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($documents as $doc): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($doc['document_name']); ?></td>
+                                        <td>
+                                            <i class="bi <?php echo getFileIcon($doc['file_type']); ?> me-1"></i>
+                                            <?php echo strtoupper(htmlspecialchars($doc['file_type'])); ?>
+                                        </td>
+                                        <td><?php echo formatFileSize($doc['file_size']); ?></td>
+                                        <td><?php echo htmlspecialchars($doc['uploaded_by_name']); ?></td>
+                                        <td><?php echo formatDate($doc['upload_date']); ?></td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="<?php echo BASE_URL; ?>/modules/documents/view.php?id=<?php echo $doc['id']; ?>" class="btn btn-outline-primary">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                                    <?php if ($user['role'] === 'Admin' || $doc['uploaded_by'] == $user['id']): ?>
+                                                    <a href="<?php echo BASE_URL; ?>/modules/documents/delete.php?id=<?php echo $doc['id']; ?>" class="btn btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <?php if (hasAnyRole(['Admin', 'Auditor'])): ?>
+                                <?php if ($user['role'] === 'Admin' || $audit['auditor_id'] == $user['id']): ?>
+                                <a href="<?php echo BASE_URL; ?>/modules/documents/upload.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-primary">
+                                    <i class="bi bi-cloud-upload me-2"></i>Upload Document
+                                </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <a href="<?php echo BASE_URL; ?>/modules/documents/list.php?audit_id=<?php echo $audit['id']; ?>" class="btn btn-outline-secondary">
+                                <i class="bi bi-list me-2"></i>View All Documents
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

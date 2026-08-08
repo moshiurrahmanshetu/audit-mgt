@@ -11,6 +11,7 @@ define('APP_NAME', 'Audit Management CMS');
 define('BASE_URL', '/audit-mgt'); // Project path for XAMPP Apache server
 define('UPLOAD_PATH', __DIR__ . '/../uploads');
 define('AVATAR_PATH', UPLOAD_PATH . '/avatars');
+define('DOCUMENTS_PATH', UPLOAD_PATH . '/documents');
 
 // Error reporting (disable in production)
 error_reporting(E_ALL);

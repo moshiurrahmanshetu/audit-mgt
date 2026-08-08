@@ -23,6 +23,11 @@
             <span class="sidebar-text">Findings</span>
         </a>
         
+        <a href="<?php echo BASE_URL; ?>/modules/documents/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'documents') !== false ? 'active' : ''; ?>">
+            <i class="bi bi-folder me-2"></i>
+            <span class="sidebar-text">Documents</span>
+        </a>
+        
         <?php if (hasRole('Admin')): ?>
         <a href="<?php echo BASE_URL; ?>/modules/users/list.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'users/list.php') !== false ? 'active' : ''; ?>">
             <i class="bi bi-people me-2"></i>
