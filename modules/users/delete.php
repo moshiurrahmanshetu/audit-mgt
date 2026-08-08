@@ -42,7 +42,7 @@ try {
     logActivity($_SESSION['user_id'], $action, 'User', $user_id, "{$action}: {$user['full_name']}");
     
     $action_display = ($new_status === 'inactive') ? 'deactivated' : 'activated';
-    setFlashMessage('User "' . htmlspecialchars($user['full_name']) . '" has been ' . $action_display . '.', 'success');
+    setFlashMessage('User "' . htmlspecialchars($user['full_name'] ?? '') . '" has been ' . $action_display . '.', 'success');
 } catch (PDOException $e) {
     setFlashMessage('Error updating user status: ' . $e->getMessage(), 'danger');
 }

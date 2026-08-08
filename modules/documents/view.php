@@ -147,20 +147,20 @@ $is_pdf = $file_type === 'pdf';
     <div class="col-lg-8">
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><?php echo htmlspecialchars($document['document_name']); ?></h5>
+                <h5 class="mb-0"><?php echo htmlspecialchars($document['document_name'] ?? ''); ?></h5>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <strong>Audit:</strong>
                         <a href="<?php echo BASE_URL; ?>/modules/audits/view.php?id=<?php echo $document['audit_id']; ?>" class="text-decoration-none">
-                            <?php echo htmlspecialchars($document['audit_code'] . ' - ' . $document['audit_title']); ?>
+                            <?php echo htmlspecialchars($document['audit_code'] ?? '' . ' - ' . $document['audit_title'] ?? ''); ?>
                         </a>
                     </div>
                     <div class="col-md-6">
                         <strong>Type:</strong>
                         <i class="bi <?php echo getFileIcon($document['file_type']); ?> me-1"></i>
-                        <?php echo strtoupper(htmlspecialchars($document['file_type'])); ?>
+                        <?php echo strtoupper(htmlspecialchars($document['file_type'] ?? '')); ?>
                     </div>
                 </div>
                 
@@ -169,7 +169,7 @@ $is_pdf = $file_type === 'pdf';
                         <strong>Size:</strong> <?php echo formatFileSize($document['file_size']); ?>
                     </div>
                     <div class="col-md-6">
-                        <strong>Uploaded By:</strong> <?php echo htmlspecialchars($document['uploaded_by_name']); ?>
+                        <strong>Uploaded By:</strong> <?php echo htmlspecialchars($document['uploaded_by_name'] ?? ''); ?>
                     </div>
                 </div>
                 
@@ -178,7 +178,7 @@ $is_pdf = $file_type === 'pdf';
                         <strong>Upload Date:</strong> <?php echo formatDate($document['upload_date']); ?>
                     </div>
                     <div class="col-md-6">
-                        <strong>File Name:</strong> <?php echo htmlspecialchars($document['file_name']); ?>
+                        <strong>File Name:</strong> <?php echo htmlspecialchars($document['file_name'] ?? ''); ?>
                     </div>
                 </div>
                 
@@ -186,7 +186,7 @@ $is_pdf = $file_type === 'pdf';
                 <hr>
                 <div class="mb-3">
                     <strong>Description:</strong>
-                    <div class="mt-2"><?php echo nl2br(htmlspecialchars($document['description'])); ?></div>
+                    <div class="mt-2"><?php echo nl2br(htmlspecialchars($document['description'] ?? '')); ?></div>
                 </div>
                 <?php endif; ?>
                 
@@ -233,7 +233,7 @@ $is_pdf = $file_type === 'pdf';
                 <ul class="list-unstyled mb-0">
                     <li class="mb-2"><strong>Uploaded:</strong> <?php echo formatDate($document['upload_date'], 'M d, Y H:i'); ?></li>
                     <li class="mb-2"><strong>Size:</strong> <?php echo formatFileSize($document['file_size']); ?></li>
-                    <li class="mb-2"><strong>Type:</strong> <?php echo strtoupper(htmlspecialchars($document['file_type'])); ?></li>
+                    <li class="mb-2"><strong>Type:</strong> <?php echo strtoupper(htmlspecialchars($document['file_type'] ?? '')); ?></li>
                     <li class="mb-0"><strong>ID:</strong> #<?php echo $document['id']; ?></li>
                 </ul>
             </div>

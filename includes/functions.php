@@ -69,8 +69,12 @@ function hasAnyRole($roles) {
 
 // Generate avatar URL
 function getAvatarUrl($avatar = null) {
-    if ($avatar && file_exists(AVATAR_PATH . '/' . $avatar)) {
-        return BASE_URL . '/uploads/avatars/' . $avatar;
+    if (!empty($avatar)) {
+        // Check if file exists - use absolute path
+        $avatarPath = AVATAR_PATH . '/' . $avatar;
+        if (file_exists($avatarPath)) {
+            return BASE_URL . '/uploads/avatars/' . $avatar;
+        }
     }
     return BASE_URL . '/assets/img/default-avatar.png';
 }

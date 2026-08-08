@@ -119,8 +119,8 @@ require_once __DIR__ . '/../../includes/header.php';
     <div class="col-lg-8">
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-clipboard-check me-2"></i><?php echo htmlspecialchars($audit['title']); ?></h5>
-                <small class="text-muted">Audit Code: <?php echo htmlspecialchars($audit['audit_code']); ?></small>
+                <h5 class="mb-0"><i class="bi bi-clipboard-check me-2"></i><?php echo htmlspecialchars($audit['title'] ?? ''); ?></h5>
+                <small class="text-muted">Audit Code: <?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?></small>
             </div>
             <div class="card-body">
                 <?php if ($error): ?>
@@ -146,10 +146,10 @@ require_once __DIR__ . '/../../includes/header.php';
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h6 class="mb-0"><?php echo ($index + 1) . '. ' . htmlspecialchars($item['question_text']); ?></h6>
+                                <h6 class="mb-0"><?php echo ($index + 1) . '. ' . htmlspecialchars($item['question_text'] ?? ''); ?></h6>
                                 <?php if ($item['response']): ?>
                                 <span class="badge <?php echo $item['response'] === 'Yes' ? 'badge-active' : ($item['response'] === 'No' ? 'badge-inactive' : 'bg-secondary'); ?>">
-                                    <?php echo htmlspecialchars($item['response']); ?>
+                                    <?php echo htmlspecialchars($item['response'] ?? ''); ?>
                                 </span>
                                 <?php endif; ?>
                             </div>
@@ -234,13 +234,13 @@ require_once __DIR__ . '/../../includes/header.php';
             </div>
             <div class="card-body">
                 <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><strong>Code:</strong> <?php echo htmlspecialchars($audit['audit_code']); ?></li>
-                    <li class="mb-2"><strong>Department:</strong> <?php echo htmlspecialchars($audit['department']); ?></li>
+                    <li class="mb-2"><strong>Code:</strong> <?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?></li>
+                    <li class="mb-2"><strong>Department:</strong> <?php echo htmlspecialchars($audit['department'] ?? ''); ?></li>
                     <li class="mb-2"><strong>Auditor:</strong> <?php echo htmlspecialchars($audit['auditor_name'] ?? 'Unassigned'); ?></li>
                     <li class="mb-2"><strong>Date:</strong> <?php echo formatDate($audit['audit_date']); ?></li>
                     <li class="mb-0"><strong>Status:</strong> 
                         <span class="badge <?php echo $audit['status'] === 'Completed' ? 'badge-active' : ($audit['status'] === 'In Progress' ? 'bg-warning' : 'bg-secondary'); ?>">
-                            <?php echo htmlspecialchars($audit['status']); ?>
+                            <?php echo htmlspecialchars($audit['status'] ?? ''); ?>
                         </span>
                     </li>
                 </ul>

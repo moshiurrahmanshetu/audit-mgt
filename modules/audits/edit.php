@@ -124,13 +124,13 @@ try {
                 <form method="POST" action="">
                     <div class="mb-3">
                         <label for="audit_code" class="form-label">Audit Code</label>
-                        <input type="text" class="form-control" id="audit_code" name="audit_code" value="<?php echo htmlspecialchars($audit['audit_code']); ?>" readonly class="bg-light">
+                        <input type="text" class="form-control" id="audit_code" name="audit_code" value="<?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?>" readonly class="bg-light">
                         <small class="text-muted">Audit code cannot be changed</small>
                     </div>
                     
                     <div class="mb-3">
                         <label for="title" class="form-label">Audit Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($audit['title']); ?>" required>
+                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($audit['title'] ?? ''); ?>" required>
                     </div>
                     
                     <div class="row">
@@ -158,7 +158,7 @@ try {
                                 <option value="">Unassigned</option>
                                 <?php foreach ($auditors as $auditor): ?>
                                 <option value="<?php echo $auditor['id']; ?>" <?php echo ($audit['auditor_id'] == $auditor['id']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($auditor['full_name']); ?>
+                                    <?php echo htmlspecialchars($auditor['full_name'] ?? ''); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>

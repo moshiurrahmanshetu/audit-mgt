@@ -133,7 +133,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                 <option value="">Unassigned</option>
                                 <?php foreach ($users as $u): ?>
                                 <option value="<?php echo $u['id']; ?>" <?php echo (isset($_POST['responsible_user_id']) && $_POST['responsible_user_id'] == $u['id']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($u['full_name']); ?>
+                                    <?php echo htmlspecialchars($u['full_name'] ?? ''); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>

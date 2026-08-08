@@ -92,9 +92,9 @@ require_once __DIR__ . '/../../includes/header.php';
                 </div>
                 
                 <div class="mb-4">
-                    <p><strong>Document:</strong> <?php echo htmlspecialchars($document['document_name']); ?></p>
-                    <p><strong>File:</strong> <?php echo htmlspecialchars($document['file_name']); ?></p>
-                    <p><strong>Type:</strong> <?php echo strtoupper(htmlspecialchars($document['file_type'])); ?></p>
+                    <p><strong>Document:</strong> <?php echo htmlspecialchars($document['document_name'] ?? ''); ?></p>
+                    <p><strong>File:</strong> <?php echo htmlspecialchars($document['file_name'] ?? ''); ?></p>
+                    <p><strong>Type:</strong> <?php echo strtoupper(htmlspecialchars($document['file_type'] ?? '')); ?></p>
                     <p><strong>Size:</strong> <?php echo number_format($document['file_size'] / 1024, 2); ?> KB</p>
                 </div>
                 

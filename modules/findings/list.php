@@ -163,22 +163,22 @@ $status_colors = [
                 <tbody>
                     <?php foreach ($findings as $finding): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($finding['finding_title']); ?></td>
+                        <td><?php echo htmlspecialchars($finding['finding_title'] ?? ''); ?></td>
                         <td>
                             <a href="<?php echo BASE_URL; ?>/modules/audits/view.php?id=<?php echo $finding['audit_id']; ?>" class="text-decoration-none">
-                                <?php echo htmlspecialchars($finding['audit_code']); ?>
+                                <?php echo htmlspecialchars($finding['audit_code'] ?? ''); ?>
                             </a>
                         </td>
                         <td>
                             <span class="badge <?php echo $severity_colors[$finding['severity']]; ?>">
-                                <?php echo htmlspecialchars($finding['severity']); ?>
+                                <?php echo htmlspecialchars($finding['severity'] ?? ''); ?>
                             </span>
                         </td>
                         <td><?php echo htmlspecialchars($finding['responsible_name'] ?? 'Unassigned'); ?></td>
                         <td><?php echo $finding['due_date'] ? formatDate($finding['due_date']) : '-'; ?></td>
                         <td>
                             <span class="badge <?php echo $status_colors[$finding['status']]; ?>">
-                                <?php echo htmlspecialchars($finding['status']); ?>
+                                <?php echo htmlspecialchars($finding['status'] ?? ''); ?>
                             </span>
                         </td>
                         <td>

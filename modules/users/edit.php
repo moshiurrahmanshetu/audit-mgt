@@ -15,7 +15,26 @@ if ($user_id <= 0) {
     redirect('/modules/users/list.php');
 }
 
-// Handle POST logic FIRST, before any HTML output
+// STEP A: Always fetch user data unconditionally at the top
+try {
+    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user) {
+        setFlashMessage('User not found.', 'danger');
+        redirect('/modules/users/list.php');
+    }
+    
+    // Get all roles
+    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
+    $roles = $stmt->fetchAll();
+} catch (PDOException $e) {
+    setFlashMessage('Error fetching user data: ' . $e->getMessage(), 'danger');
+    redirect('/modules/users/list.php');
+}
+
+// STEP B: Handle POST logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = sanitize($_POST['full_name'] ?? '');
     $email = sanitize($_POST['email'] ?? '');
@@ -74,28 +93,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Only AFTER all possible redirects, include header and render HTML
-$pageTitle = 'Edit User';
-require_once __DIR__ . '/../../includes/header.php';
-
-try {
-    // Get user data
-    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
-    $stmt->execute([$user_id]);
-    $user = $stmt->fetch();
-    
-    if (!$user) {
-        setFlashMessage('User not found.', 'danger');
+// After successful save, re-fetch fresh data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
+    try {
+        $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
+        $stmt->execute([$user_id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Get all roles
+        $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
+        $roles = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        setFlashMessage('Error fetching user data: ' . $e->getMessage(), 'danger');
         redirect('/modules/users/list.php');
     }
-    
-    // Get all roles
-    $stmt = $pdo->query("SELECT * FROM roles ORDER BY role_name");
-    $roles = $stmt->fetchAll();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching user data: ' . $e->getMessage(), 'danger');
-    redirect('/modules/users/list.php');
 }
+
+$pageTitle = 'Edit User';
+require_once __DIR__ . '/../../includes/header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-pencil me-2"></i>Edit User</h2>
@@ -140,7 +155,7 @@ try {
                             <select class="form-select" id="role_id" name="role_id" required>
                                 <?php foreach ($roles as $role): ?>
                                 <option value="<?php echo $role['id']; ?>" <?php echo ($user['role_id'] == $role['id']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($role['role_name']); ?>
+                                    <?php echo htmlspecialchars($role['role_name'] ?? ''); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>

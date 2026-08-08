@@ -59,15 +59,15 @@ try {
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="<?php echo getAvatarUrl($user['avatar']); ?>" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+                                <img src="<?php echo getAvatarUrl($user['avatar'] ?? ''); ?>" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
                                 <div>
-                                    <div class="fw-bold"><?php echo htmlspecialchars($user['full_name']); ?></div>
+                                    <div class="fw-bold"><?php echo htmlspecialchars($user['full_name'] ?? ''); ?></div>
                                 </div>
                             </div>
                         </td>
-                        <td><?php echo htmlspecialchars($user['username']); ?></td>
-                        <td><?php echo htmlspecialchars($user['email']); ?></td>
-                        <td><span class="badge bg-secondary"><?php echo htmlspecialchars($user['role_name']); ?></span></td>
+                        <td><?php echo htmlspecialchars($user['username'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($user['email'] ?? ''); ?></td>
+                        <td><span class="badge bg-secondary"><?php echo htmlspecialchars($user['role_name'] ?? ''); ?></span></td>
                         <td>
                             <?php if ($user['status'] === 'active'): ?>
                                 <span class="badge badge-active">Active</span>

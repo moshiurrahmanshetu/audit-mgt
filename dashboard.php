@@ -249,11 +249,11 @@ require_once __DIR__ . '/includes/header.php';
                         <tbody>
                             <?php foreach ($recent_audits as $audit): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($audit['code'] ?? $audit['audit_code']); ?></td>
-                                <td><?php echo htmlspecialchars($audit['title']); ?></td>
+                                <td><?php echo htmlspecialchars($audit['code'] ?? $audit['audit_code'] ?? ''); ?></td>
+                                <td><?php echo htmlspecialchars($audit['title'] ?? ''); ?></td>
                                 <td>
                                     <span class="badge <?php echo $audit['status'] === 'Completed' ? 'bg-success' : ($audit['Status'] === 'In Progress' ? 'bg-warning' : 'bg-secondary'); ?>">
-                                        <?php echo htmlspecialchars($audit['status']); ?>
+                                        <?php echo htmlspecialchars($audit['status'] ?? ''); ?>
                                     </span>
                                 </td>
                                 <td><?php echo formatDate($audit['created_at']); ?></td>
@@ -295,11 +295,11 @@ require_once __DIR__ . '/includes/header.php';
                                     <span class="text-muted small"><?php echo timeAgo($activity['created_at']); ?></span>
                                 </p>
                                 <p class="mb-1 small">
-                                    <span class="badge bg-secondary"><?php echo htmlspecialchars($activity['module']); ?></span>
-                                    <?php echo htmlspecialchars($activity['action']); ?>
+                                    <span class="badge bg-secondary"><?php echo htmlspecialchars($activity['module'] ?? ''); ?></span>
+                                    <?php echo htmlspecialchars($activity['action'] ?? ''); ?>
                                 </p>
                                 <?php if ($activity['description']): ?>
-                                <p class="mb-0 small text-muted"><?php echo htmlspecialchars($activity['description']); ?></p>
+                                <p class="mb-0 small text-muted"><?php echo htmlspecialchars($activity['description'] ?? ''); ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>

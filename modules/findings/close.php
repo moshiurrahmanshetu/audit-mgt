@@ -95,8 +95,8 @@ require_once __DIR__ . '/../../includes/header.php';
                 </div>
                 
                 <div class="mb-4">
-                    <p><strong>Finding:</strong> <?php echo htmlspecialchars($finding['finding_title']); ?></p>
-                    <p><strong>Audit:</strong> <?php echo htmlspecialchars($finding['audit_code'] . ' - ' . $finding['audit_title']); ?></p>
+                    <p><strong>Finding:</strong> <?php echo htmlspecialchars($finding['finding_title'] ?? ''); ?></p>
+                    <p><strong>Audit:</strong> <?php echo htmlspecialchars($finding['audit_code'] ?? '' . ' - ' . $finding['audit_title'] ?? ''); ?></p>
                     <p><strong>Current Status:</strong> <span class="badge badge-active">Resolved</span></p>
                     <p><strong>New Status:</strong> <span class="badge bg-secondary">Closed</span></p>
                 </div>

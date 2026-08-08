@@ -120,7 +120,7 @@ try {
                             <option value="">Unassigned</option>
                             <?php foreach ($auditors as $auditor): ?>
                             <option value="<?php echo $auditor['id']; ?>" <?php echo (isset($_POST['auditor_id']) && $_POST['auditor_id'] == $auditor['id']) ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($auditor['full_name']); ?>
+                                <?php echo htmlspecialchars($auditor['full_name'] ?? ''); ?>
                             </option>
                             <?php endforeach; ?>
                         </select>

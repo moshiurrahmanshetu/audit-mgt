@@ -130,18 +130,18 @@ function formatFileSize($bytes) {
                 <tbody>
                     <?php foreach ($documents as $doc): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($doc['document_name']); ?></td>
+                        <td><?php echo htmlspecialchars($doc['document_name'] ?? ''); ?></td>
                         <td>
                             <i class="bi <?php echo getFileIcon($doc['file_type']); ?> me-1"></i>
-                            <?php echo strtoupper(htmlspecialchars($doc['file_type'])); ?>
+                            <?php echo strtoupper(htmlspecialchars($doc['file_type'] ?? '')); ?>
                         </td>
                         <td><?php echo formatFileSize($doc['file_size']); ?></td>
                         <td>
                             <a href="<?php echo BASE_URL; ?>/modules/audits/view.php?id=<?php echo $doc['audit_id']; ?>" class="text-decoration-none">
-                                <?php echo htmlspecialchars($doc['audit_code']); ?>
+                                <?php echo htmlspecialchars($doc['audit_code'] ?? ''); ?>
                             </a>
                         </td>
-                        <td><?php echo htmlspecialchars($doc['uploaded_by_name']); ?></td>
+                        <td><?php echo htmlspecialchars($doc['uploaded_by_name'] ?? ''); ?></td>
                         <td><?php echo formatDate($doc['upload_date']); ?></td>
                         <td>
                             <div class="btn-group btn-group-sm">

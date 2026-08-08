@@ -140,7 +140,7 @@ require_once __DIR__ . '/../../includes/header.php';
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-info">
-                    <strong>Audit:</strong> <?php echo htmlspecialchars($audit['audit_code'] . ' - ' . $audit['title']); ?>
+                    <strong>Audit:</strong> <?php echo htmlspecialchars($audit['audit_code'] ?? '' . ' - ' . $audit['title'] ?? ''); ?>
                 </div>
                 
                 <?php if ($error): ?>

@@ -154,14 +154,14 @@ $status_colors = [
                 <tbody>
                     <?php foreach ($audits as $audit): ?>
                     <tr>
-                        <td><strong><?php echo htmlspecialchars($audit['audit_code']); ?></strong></td>
-                        <td><?php echo htmlspecialchars($audit['title']); ?></td>
-                        <td><?php echo htmlspecialchars($audit['department']); ?></td>
+                        <td><strong><?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?></strong></td>
+                        <td><?php echo htmlspecialchars($audit['title'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($audit['department'] ?? ''); ?></td>
                         <td><?php echo htmlspecialchars($audit['auditor_name'] ?? 'Unassigned'); ?></td>
                         <td><?php echo formatDate($audit['audit_date']); ?></td>
                         <td>
                             <span class="badge <?php echo $status_colors[$audit['status']]; ?>">
-                                <?php echo htmlspecialchars($audit['status']); ?>
+                                <?php echo htmlspecialchars($audit['status'] ?? ''); ?>
                             </span>
                         </td>
                         <td>

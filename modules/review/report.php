@@ -122,7 +122,7 @@ $finding_status_colors = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Report - <?php echo htmlspecialchars($audit['audit_code']); ?></title>
+    <title>Audit Report - <?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?></title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -316,15 +316,15 @@ $finding_status_colors = [
             <table class="info-table">
                 <tr>
                     <th>Audit Code</th>
-                    <td><?php echo htmlspecialchars($audit['audit_code']); ?></td>
+                    <td><?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?></td>
                 </tr>
                 <tr>
                     <th>Title</th>
-                    <td><?php echo htmlspecialchars($audit['title']); ?></td>
+                    <td><?php echo htmlspecialchars($audit['title'] ?? ''); ?></td>
                 </tr>
                 <tr>
                     <th>Department</th>
-                    <td><?php echo htmlspecialchars($audit['department']); ?></td>
+                    <td><?php echo htmlspecialchars($audit['department'] ?? ''); ?></td>
                 </tr>
                 <tr>
                     <th>Auditor</th>
@@ -340,14 +340,14 @@ $finding_status_colors = [
                         <?php if ($audit['status'] === 'Completed'): ?>
                             <span class="status-completed">Completed</span>
                         <?php else: ?>
-                            <span class="status-draft">DRAFT - <?php echo htmlspecialchars($audit['status']); ?></span>
+                            <span class="status-draft">DRAFT - <?php echo htmlspecialchars($audit['status'] ?? ''); ?></span>
                         <?php endif; ?>
                     </td>
                 </tr>
                 <?php if ($audit['reviewed_by']): ?>
                 <tr>
                     <th>Reviewed By</th>
-                    <td><?php echo htmlspecialchars($audit['reviewed_by_name']); ?></td>
+                    <td><?php echo htmlspecialchars($audit['reviewed_by_name'] ?? ''); ?></td>
                 </tr>
                 <tr>
                     <th>Reviewed At</th>
@@ -359,7 +359,7 @@ $finding_status_colors = [
             <?php if ($audit['description']): ?>
             <div class="mt-3">
                 <strong>Description:</strong>
-                <div class="mt-2"><?php echo nl2br(htmlspecialchars($audit['description'])); ?></div>
+                <div class="mt-2"><?php echo nl2br(htmlspecialchars($audit['description'] ?? '')); ?></div>
             </div>
             <?php endif; ?>
         </div>
@@ -388,11 +388,11 @@ $finding_status_colors = [
                     <?php foreach ($checklist_items as $index => $item): ?>
                     <tr>
                         <td><?php echo $index + 1; ?></td>
-                        <td><?php echo htmlspecialchars($item['question_text']); ?></td>
+                        <td><?php echo htmlspecialchars($item['question_text'] ?? ''); ?></td>
                         <td>
                             <?php if ($item['response']): ?>
                                 <span class="badge <?php echo $item['response'] === 'Yes' ? 'badge-active' : ($item['response'] === 'No' ? 'badge-inactive' : 'bg-secondary'); ?>">
-                                    <?php echo htmlspecialchars($item['response']); ?>
+                                    <?php echo htmlspecialchars($item['response'] ?? ''); ?>
                                 </span>
                             <?php else: ?>
                                 <span class="text-muted">-</span>
@@ -429,16 +429,16 @@ $finding_status_colors = [
                 <tbody>
                     <?php foreach ($findings as $f): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($f['finding_title']); ?></td>
+                        <td><?php echo htmlspecialchars($f['finding_title'] ?? ''); ?></td>
                         <td>
                             <span class="badge <?php echo $severity_colors[$f['severity']]; ?>">
-                                <?php echo htmlspecialchars($f['severity']); ?>
+                                <?php echo htmlspecialchars($f['severity'] ?? ''); ?>
                             </span>
                         </td>
                         <td><?php echo htmlspecialchars($f['responsible_name'] ?? 'Unassigned'); ?></td>
                         <td>
                             <span class="badge <?php echo $finding_status_colors[$f['status']]; ?>">
-                                <?php echo htmlspecialchars($f['status']); ?>
+                                <?php echo htmlspecialchars($f['status'] ?? ''); ?>
                             </span>
                         </td>
                         <td><?php echo $f['due_date'] ? formatDate($f['due_date']) : '-'; ?></td>
@@ -464,9 +464,9 @@ $finding_status_colors = [
                 <tbody>
                     <?php foreach ($documents as $doc): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($doc['document_name']); ?></td>
-                        <td><?php echo strtoupper(htmlspecialchars($doc['file_type'])); ?></td>
-                        <td><?php echo htmlspecialchars($doc['uploaded_by_name']); ?></td>
+                        <td><?php echo htmlspecialchars($doc['document_name'] ?? ''); ?></td>
+                        <td><?php echo strtoupper(htmlspecialchars($doc['file_type'] ?? '')); ?></td>
+                        <td><?php echo htmlspecialchars($doc['uploaded_by_name'] ?? ''); ?></td>
                         <td><?php echo formatDate($doc['upload_date']); ?></td>
                     </tr>
                     <?php endforeach; ?>
@@ -481,7 +481,7 @@ $finding_status_colors = [
             <h2>Auditor Comments</h2>
             <div class="comments-box">
                 <h4>Comments:</h4>
-                <div class="comments-text"><?php echo nl2br(htmlspecialchars($audit['auditor_comments'])); ?></div>
+                <div class="comments-text"><?php echo nl2br(htmlspecialchars($audit['auditor_comments'] ?? '')); ?></div>
             </div>
         </div>
         <?php endif; ?>
@@ -492,7 +492,7 @@ $finding_status_colors = [
             <h2>Final Remarks</h2>
             <div class="comments-box">
                 <h4>Remarks:</h4>
-                <div class="comments-text"><?php echo nl2br(htmlspecialchars($audit['final_remarks'])); ?></div>
+                <div class="comments-text"><?php echo nl2br(htmlspecialchars($audit['final_remarks'] ?? '')); ?></div>
             </div>
         </div>
         <?php endif; ?>

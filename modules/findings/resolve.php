@@ -88,8 +88,8 @@ require_once __DIR__ . '/../../includes/header.php';
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-info">
-                    <strong>Finding:</strong> <?php echo htmlspecialchars($finding['finding_title']); ?><br>
-                    <strong>Audit:</strong> <?php echo htmlspecialchars($finding['audit_code'] . ' - ' . $finding['audit_title']); ?>
+                    <strong>Finding:</strong> <?php echo htmlspecialchars($finding['finding_title'] ?? ''); ?><br>
+                    <strong>Audit:</strong> <?php echo htmlspecialchars($finding['audit_code'] ?? '' . ' - ' . $finding['audit_title'] ?? ''); ?>
                 </div>
                 
                 <?php if ($error): ?>

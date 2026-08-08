@@ -3,13 +3,23 @@ require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../config/db.php';
 
-$user_id = $_SESSION['user_id'];
+// STEP A: Always fetch fresh user data first, unconditionally, before anything else
+$stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = :id");
+$stmt->execute(['id' => $_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    // Should never happen, but handle gracefully instead of continuing with broken data
+    header('Location: ' . BASE_URL . '/modules/auth/login.php');
+    exit;
+}
+
 $error = '';
 
-// Handle POST logic FIRST, before any HTML output
+// STEP B: Handle POST (form submission) — this REASSIGNS $user only with fresh data AFTER a successful save, never with empty/wrong data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $full_name = sanitize($_POST['full_name'] ?? '');
-    $email = sanitize($_POST['email'] ?? '');
+    $full_name = trim($_POST['full_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $avatar = $_FILES['avatar'] ?? null;
     
     // Validation
@@ -21,12 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Check if email already exists for another user
             $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
-            $stmt->execute([$email, $user_id]);
+            $stmt->execute([$email, $_SESSION['user_id']]);
             if ($stmt->fetch()) {
                 $error = 'Email already exists for another user.';
             } else {
                 // Handle avatar upload
                 $avatar_filename = $user['avatar'];
+                
                 if ($avatar && $avatar['error'] === UPLOAD_ERR_OK) {
                     $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
                     $max_size = 2 * 1024 * 1024; // 2MB
@@ -37,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error = 'File size must be less than 2MB.';
                     } else {
                         $extension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
-                        $avatar_filename = 'avatar_' . $user_id . '_' . time() . '.' . $extension;
+                        $avatar_filename = 'avatar_' . $_SESSION['user_id'] . '_' . time() . '.' . $extension;
                         
                         if (!is_dir(AVATAR_PATH)) {
                             mkdir(AVATAR_PATH, 0755, true);
@@ -58,14 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!$error) {
                     // Update user
                     $stmt = $pdo->prepare("UPDATE users SET full_name = ?, email = ?, avatar = ? WHERE id = ?");
-                    $stmt->execute([$full_name, $email, $avatar_filename, $user_id]);
+                    $stmt->execute([$full_name, $email, $avatar_filename, $_SESSION['user_id']]);
                     
                     // Update session
                     $_SESSION['user_name'] = $full_name;
                     $_SESSION['user_avatar'] = $avatar_filename;
                     
+                    // After successful save, RE-FRESH data so the page reflects the update
+                    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = :id");
+                    $stmt->execute(['id' => $_SESSION['user_id']]);
+                    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
                     setFlashMessage('Profile updated successfully!', 'success');
-                    redirect('/modules/users/profile.php');
                 }
             }
         } catch (PDOException $e) {
@@ -74,19 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Only AFTER all possible redirects, include header and render HTML
 $pageTitle = 'My Profile';
 require_once __DIR__ . '/../../includes/header.php';
-
-try {
-    // Get current user data with role
-    $stmt = $pdo->prepare("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?");
-    $stmt->execute([$user_id]);
-    $user = $stmt->fetch();
-} catch (PDOException $e) {
-    setFlashMessage('Error fetching profile: ' . $e->getMessage(), 'danger');
-    redirect('/dashboard.php');
-}
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-person me-2"></i>My Profile</h2>

@@ -97,8 +97,8 @@ require_once __DIR__ . '/../../includes/header.php';
                 <select class="form-select" id="module" name="module">
                     <option value="">All Modules</option>
                     <?php foreach ($modules as $module): ?>
-                    <option value="<?php echo htmlspecialchars($module); ?>" <?php echo $filter_module === $module ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($module); ?>
+                    <option value="<?php echo htmlspecialchars($module ?? ''); ?>" <?php echo $filter_module === $module ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($module ?? ''); ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -109,7 +109,7 @@ require_once __DIR__ . '/../../includes/header.php';
                     <option value="">All Users</option>
                     <?php foreach ($users as $u): ?>
                     <option value="<?php echo $u['id']; ?>" <?php echo $filter_user == $u['id'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($u['full_name']); ?>
+                        <?php echo htmlspecialchars($u['full_name'] ?? ''); ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -162,9 +162,9 @@ require_once __DIR__ . '/../../includes/header.php';
                             <small class="text-muted"><?php echo date('M d, Y H:i', strtotime($activity['created_at'])); ?></small>
                         </td>
                         <td><?php echo htmlspecialchars($activity['user_name'] ?? 'Unknown'); ?></td>
-                        <td><?php echo htmlspecialchars($activity['action']); ?></td>
+                        <td><?php echo htmlspecialchars($activity['action'] ?? ''); ?></td>
                         <td>
-                            <span class="badge bg-secondary"><?php echo htmlspecialchars($activity['module']); ?></span>
+                            <span class="badge bg-secondary"><?php echo htmlspecialchars($activity['module'] ?? ''); ?></span>
                         </td>
                         <td><?php echo htmlspecialchars($activity['description'] ?? '-'); ?></td>
                     </tr>
@@ -179,7 +179,7 @@ require_once __DIR__ . '/../../includes/header.php';
             <ul class="pagination justify-content-center">
                 <?php if ($page > 1): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&module=<?php echo htmlspecialchars($filter_module); ?>&user=<?php echo $filter_user; ?>">Previous</a>
+                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&module=<?php echo htmlspecialchars($filter_module ?? ''); ?>&user=<?php echo $filter_user; ?>">Previous</a>
                 </li>
                 <?php endif; ?>
                 
@@ -190,7 +190,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 </li>
                 <?php elseif ($i == 1 || $i == $total_pages || ($i >= $page - 2 && $i <= $page + 2)): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo $i; ?>&module=<?php echo htmlspecialchars($filter_module); ?>&user=<?php echo $filter_user; ?>"><?php echo $i; ?></a>
+                    <a class="page-link" href="?page=<?php echo $i; ?>&module=<?php echo htmlspecialchars($filter_module ?? ''); ?>&user=<?php echo $filter_user; ?>"><?php echo $i; ?></a>
                 </li>
                 <?php elseif ($i == $page - 3 || $i == $page + 3): ?>
                 <li class="page-item disabled">
@@ -201,7 +201,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 
                 <?php if ($page < $total_pages): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&module=<?php echo htmlspecialchars($filter_module); ?>&user=<?php echo $filter_user; ?>">Next</a>
+                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&module=<?php echo htmlspecialchars($filter_module ?? ''); ?>&user=<?php echo $filter_user; ?>">Next</a>
                 </li>
                 <?php endif; ?>
             </ul>

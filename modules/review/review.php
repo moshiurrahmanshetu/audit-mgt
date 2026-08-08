@@ -166,13 +166,13 @@ $finding_status_colors = [
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <strong>Audit Code:</strong> <?php echo htmlspecialchars($audit['audit_code']); ?>
+                        <strong>Audit Code:</strong> <?php echo htmlspecialchars($audit['audit_code'] ?? ''); ?>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <strong>Title:</strong> <?php echo htmlspecialchars($audit['title']); ?>
+                        <strong>Title:</strong> <?php echo htmlspecialchars($audit['title'] ?? ''); ?>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <strong>Department:</strong> <?php echo htmlspecialchars($audit['department']); ?>
+                        <strong>Department:</strong> <?php echo htmlspecialchars($audit['department'] ?? ''); ?>
                     </div>
                     <div class="col-md-6 mb-3">
                         <strong>Auditor:</strong> <?php echo htmlspecialchars($audit['auditor_name'] ?? 'Unassigned'); ?>
@@ -191,7 +191,7 @@ $finding_status_colors = [
                 <hr>
                 <div class="mb-0">
                     <strong>Description:</strong>
-                    <div class="mt-2"><?php echo nl2br(htmlspecialchars($audit['description'])); ?></div>
+                    <div class="mt-2"><?php echo nl2br(htmlspecialchars($audit['description'] ?? '')); ?></div>
                 </div>
                 <?php endif; ?>
             </div>
@@ -231,11 +231,11 @@ $finding_status_colors = [
                             <?php foreach ($checklist_items as $index => $item): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars($item['question_text']); ?></td>
+                                <td><?php echo htmlspecialchars($item['question_text'] ?? ''); ?></td>
                                 <td>
                                     <?php if ($item['response']): ?>
                                         <span class="badge <?php echo $item['response'] === 'Yes' ? 'badge-active' : ($item['response'] === 'No' ? 'badge-inactive' : 'bg-secondary'); ?>">
-                                            <?php echo htmlspecialchars($item['response']); ?>
+                                            <?php echo htmlspecialchars($item['response'] ?? ''); ?>
                                         </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
@@ -280,16 +280,16 @@ $finding_status_colors = [
                         <tbody>
                             <?php foreach ($findings as $f): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($f['finding_title']); ?></td>
+                                <td><?php echo htmlspecialchars($f['finding_title'] ?? ''); ?></td>
                                 <td>
                                     <span class="badge <?php echo $severity_colors[$f['severity']]; ?>">
-                                        <?php echo htmlspecialchars($f['severity']); ?>
+                                        <?php echo htmlspecialchars($f['severity'] ?? ''); ?>
                                     </span>
                                 </td>
                                 <td><?php echo htmlspecialchars($f['responsible_name'] ?? 'Unassigned'); ?></td>
                                 <td>
                                     <span class="badge <?php echo $finding_status_colors[$f['status']]; ?>">
-                                        <?php echo htmlspecialchars($f['status']); ?>
+                                        <?php echo htmlspecialchars($f['status'] ?? ''); ?>
                                     </span>
                                 </td>
                             </tr>

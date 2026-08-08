@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tbody>
                             <?php foreach ($templates as $template): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($template['question_text']); ?></td>
+                                <td><?php echo htmlspecialchars($template['question_text'] ?? ''); ?></td>
                                 <td>
                                     <?php if ($template['is_active']): ?>
                                         <span class="badge badge-active">Active</span>
@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="hidden" name="template_id" value="<?php echo $template['id']; ?>">
                                                 <div class="mb-3">
                                                     <label for="edit_question_text<?php echo $template['id']; ?>" class="form-label">Question Text</label>
-                                                    <textarea class="form-control" id="edit_question_text<?php echo $template['id']; ?>" name="question_text" rows="3" required><?php echo htmlspecialchars($template['question_text']); ?></textarea>
+                                                    <textarea class="form-control" id="edit_question_text<?php echo $template['id']; ?>" name="question_text" rows="3" required><?php echo htmlspecialchars($template['question_text'] ?? ''); ?></textarea>
                                                 </div>
                                                 <div class="d-flex gap-2">
                                                     <button type="submit" class="btn btn-primary">

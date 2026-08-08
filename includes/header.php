@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$user = getCurrentUser();
+$currentUser = getCurrentUser();
 $flash = getFlashMessage();
 ?>
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ $flash = getFlashMessage();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle) ? htmlspecialchars($pageTitle) . ' - ' : ''; ?><?php echo APP_NAME; ?></title>
+    <title><?php echo isset($pageTitle) ? htmlspecialchars($pageTitle ?? '') . ' - ' : ''; ?><?php echo APP_NAME; ?></title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@ $flash = getFlashMessage();
     <!-- Flash Messages -->
     <?php if ($flash): ?>
     <div class="alert alert-<?php echo $flash['type']; ?> alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow" style="z-index: 1060; min-width: 300px;" role="alert">
-        <?php echo htmlspecialchars($flash['message']); ?>
+        <?php echo htmlspecialchars($flash['message'] ?? ''); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php endif; ?>
@@ -55,10 +55,10 @@ $flash = getFlashMessage();
                     <div class="ms-auto d-flex align-items-center">
                         <div class="dropdown">
                             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <img src="<?php echo getAvatarUrl($user['avatar']); ?>" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                                <img src="<?php echo getAvatarUrl($currentUser['avatar'] ?? ''); ?>" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
                                 <span class="d-none d-md-inline text-dark">
-                                    <?php echo htmlspecialchars($user['name']); ?>
-                                    <small class="text-muted d-block" style="font-size: 0.75rem;"><?php echo htmlspecialchars($user['role']); ?></small>
+                                    <?php echo htmlspecialchars($currentUser['name'] ?? ''); ?>
+                                    <small class="text-muted d-block" style="font-size: 0.75rem;"><?php echo htmlspecialchars($currentUser['role'] ?? ''); ?></small>
                                 </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">

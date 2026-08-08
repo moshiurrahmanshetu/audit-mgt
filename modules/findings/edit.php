@@ -110,7 +110,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <form method="POST" action="">
                     <div class="mb-3">
                         <label for="finding_title" class="form-label">Finding Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="finding_title" name="finding_title" value="<?php echo htmlspecialchars($finding['finding_title']); ?>" required>
+                        <input type="text" class="form-control" id="finding_title" name="finding_title" value="<?php echo htmlspecialchars($finding['finding_title'] ?? ''); ?>" required>
                     </div>
                     
                     <div class="mb-3">
@@ -134,7 +134,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                 <option value="">Unassigned</option>
                                 <?php foreach ($users as $u): ?>
                                 <option value="<?php echo $u['id']; ?>" <?php echo $finding['responsible_user_id'] == $u['id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($u['full_name']); ?>
+                                    <?php echo htmlspecialchars($u['full_name'] ?? ''); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
