@@ -44,6 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert audit
             $stmt = $pdo->prepare("INSERT INTO audits (audit_code, title, department, auditor_id, created_by, audit_date, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Planned')");
             $stmt->execute([$audit_code, $title, $department, $auditor_id ?: null, $created_by, $audit_date, $description ?: null]);
+            $new_audit_id = $pdo->lastInsertId();
+            
+            // Log audit creation activity
+            logActivity($created_by, 'Created Audit', 'Audit', $new_audit_id, "Created audit {$audit_code} - {$title}");
             
             setFlashMessage('Audit created successfully with code: ' . $audit_code, 'success');
             redirect('/modules/audits/list.php');

@@ -42,6 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Email already exists for another user.';
             } else {
                 // Update user
+                // Get old status to detect if status changed
+                $old_status_stmt = $pdo->prepare("SELECT status FROM users WHERE id = ?");
+                $old_status_stmt->execute([$user_id]);
+                $old_status = $old_status_stmt->fetchColumn();
+                
                 if ($reset_password && !empty($new_password)) {
                     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                     $stmt = $pdo->prepare("UPDATE users SET full_name = ?, email = ?, role_id = ?, status = ?, password = ? WHERE id = ?");
@@ -49,6 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $stmt = $pdo->prepare("UPDATE users SET full_name = ?, email = ?, role_id = ?, status = ? WHERE id = ?");
                     $stmt->execute([$full_name, $email, $role_id, $status, $user_id]);
+                }
+                
+                // Log user update activity
+                logActivity($_SESSION['user_id'], 'Updated User', 'User', $user_id, "Updated user {$full_name}");
+                
+                // Log status change if status was changed
+                if ($old_status !== $status) {
+                    $action = ($status === 'active') ? 'Activated User' : 'Deactivated User';
+                    logActivity($_SESSION['user_id'], $action, 'User', $user_id, "{$action}: {$full_name}");
                 }
                 
                 setFlashMessage('User updated successfully!', 'success');

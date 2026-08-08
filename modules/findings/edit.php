@@ -70,6 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE findings SET finding_title = ?, description = ?, severity = ?, responsible_user_id = ?, due_date = ? WHERE id = ?");
             $stmt->execute([$finding_title, $description ?: null, $severity, $responsible_user_id ?: null, $due_date ?: null, $finding_id]);
             
+            // Log finding update activity
+            logActivity($_SESSION['user_id'], 'Updated Finding', 'Finding', $finding_id, "Updated finding: {$finding_title}");
+            
             setFlashMessage('Finding updated successfully!', 'success');
             redirect('/modules/findings/view.php?id=' . $finding_id);
         } catch (PDOException $e) {

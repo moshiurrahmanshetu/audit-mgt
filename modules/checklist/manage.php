@@ -34,6 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO checklist_templates (question_text, is_active) VALUES (?, 1)");
                 $stmt->execute([$question_text]);
+                $new_template_id = $pdo->lastInsertId();
+                
+                // Log checklist template creation activity
+                logActivity($_SESSION['user_id'], 'Created Checklist Template', 'Checklist', $new_template_id, "Created checklist template: {$question_text}");
+                
                 setFlashMessage('Checklist question added successfully!', 'success');
                 redirect('/modules/checklist/manage.php');
             } catch (PDOException $e) {
@@ -50,6 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("UPDATE checklist_templates SET question_text = ? WHERE id = ?");
                 $stmt->execute([$question_text, $template_id]);
+                
+                // Log checklist template update activity
+                logActivity($_SESSION['user_id'], 'Updated Checklist Template', 'Checklist', $template_id, "Updated checklist template: {$question_text}");
+                
                 setFlashMessage('Checklist question updated successfully!', 'success');
                 redirect('/modules/checklist/manage.php');
             } catch (PDOException $e) {

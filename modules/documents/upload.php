@@ -106,6 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $description ?: null,
                             $user['id']
                         ]);
+                        $new_document_id = $pdo->lastInsertId();
+                        
+                        // Log document upload activity
+                        logActivity($user['id'], 'Uploaded Document', 'Document', $new_document_id, "Uploaded document: {$document_name}");
                         
                         setFlashMessage('Document uploaded successfully!', 'success');
                         redirect('/modules/audits/view.php?id=' . $audit_id);

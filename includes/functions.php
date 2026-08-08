@@ -4,6 +4,9 @@ if (!defined('APP_NAME')) {
     require_once __DIR__ . '/../config/constants.php';
 }
 
+// Load database connection for logging
+require_once __DIR__ . '/../config/db.php';
+
 // Helper Functions
 
 // Sanitize input data
@@ -106,5 +109,18 @@ function requireRole($roles) {
     if (!hasAnyRole((array) $roles)) {
         setFlashMessage('You do not have permission to access this page.', 'danger');
         redirect('/dashboard.php');
+    }
+}
+
+// Log activity to activity_log table
+function logActivity($userId, $action, $module, $referenceId = null, $description = null) {
+    global $pdo;
+    
+    try {
+        $stmt = $pdo->prepare("INSERT INTO activity_log (user_id, action, module, reference_id, description) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$userId, $action, $module, $referenceId, $description]);
+    } catch (PDOException $e) {
+        // Silently fail - logging should never break the main application flow
+        error_log("Activity logging failed: " . $e->getMessage());
     }
 }

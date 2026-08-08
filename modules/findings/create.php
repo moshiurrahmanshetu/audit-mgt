@@ -66,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert finding
             $stmt = $pdo->prepare("INSERT INTO findings (audit_id, finding_title, description, severity, responsible_user_id, due_date, status, created_by) VALUES (?, ?, ?, ?, ?, ?, 'Open', ?)");
             $stmt->execute([$audit_id, $finding_title, $description ?: null, $severity, $responsible_user_id ?: null, $due_date ?: null, $user['id']]);
+            $new_finding_id = $pdo->lastInsertId();
+            
+            // Log finding creation activity
+            logActivity($user['id'], 'Created Finding', 'Finding', $new_finding_id, "Created finding: {$finding_title}");
             
             setFlashMessage('Finding created successfully!', 'success');
             redirect('/modules/audits/view.php?id=' . $audit_id);

@@ -61,6 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE findings SET status = 'Resolved', resolution_note = ? WHERE id = ?");
             $stmt->execute([$resolution_note, $finding_id]);
             
+            // Log finding resolution activity
+            logActivity($_SESSION['user_id'], 'Resolved Finding', 'Finding', $finding_id, "Resolved finding: {$finding['finding_title']}");
+            
             setFlashMessage('Finding resolved successfully!', 'success');
             redirect('/modules/findings/view.php?id=' . $finding_id);
         } catch (PDOException $e) {

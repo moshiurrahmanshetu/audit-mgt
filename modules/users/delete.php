@@ -37,8 +37,12 @@ try {
     $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
     $stmt->execute([$new_status, $user_id]);
     
-    $action = ($new_status === 'inactive') ? 'deactivated' : 'activated';
-    setFlashMessage('User "' . htmlspecialchars($user['full_name']) . '" has been ' . $action . '.', 'success');
+    // Log status change activity
+    $action = ($new_status === 'inactive') ? 'Deactivated User' : 'Activated User';
+    logActivity($_SESSION['user_id'], $action, 'User', $user_id, "{$action}: {$user['full_name']}");
+    
+    $action_display = ($new_status === 'inactive') ? 'deactivated' : 'activated';
+    setFlashMessage('User "' . htmlspecialchars($user['full_name']) . '" has been ' . $action_display . '.', 'success');
 } catch (PDOException $e) {
     setFlashMessage('Error updating user status: ' . $e->getMessage(), 'danger');
 }

@@ -60,6 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE findings SET status = 'Closed' WHERE id = ?");
             $stmt->execute([$finding_id]);
             
+            // Log finding closure activity
+            logActivity($_SESSION['user_id'], 'Closed Finding', 'Finding', $finding_id, "Closed finding: {$finding['finding_title']}");
+            
             setFlashMessage('Finding closed successfully!', 'success');
             redirect('/modules/findings/view.php?id=' . $finding_id);
         } catch (PDOException $e) {

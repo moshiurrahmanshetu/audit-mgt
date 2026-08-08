@@ -42,9 +42,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please select a valid status.';
     } else {
         try {
+            // Get old status to detect if status changed
+            $old_status_stmt = $pdo->prepare("SELECT status, audit_code, title FROM audits WHERE id = ?");
+            $old_status_stmt->execute([$audit_id]);
+            $old_audit = $old_status_stmt->fetch();
+            
             // Update audit
             $stmt = $pdo->prepare("UPDATE audits SET title = ?, department = ?, auditor_id = ?, audit_date = ?, description = ?, status = ? WHERE id = ?");
             $stmt->execute([$title, $department, $auditor_id ?: null, $audit_date, $description ?: null, $status, $audit_id]);
+            
+            // Log audit update activity
+            logActivity($_SESSION['user_id'], 'Updated Audit', 'Audit', $audit_id, "Updated audit {$old_audit['audit_code']} - {$title}");
+            
+            // Log status change if status was changed
+            if ($old_audit['status'] !== $status) {
+                $action = ($status === 'Completed') ? 'Completed Audit' : "Changed Audit Status to {$status}";
+                logActivity($_SESSION['user_id'], $action, 'Audit', $audit_id, "{$action}: {$old_audit['audit_code']} - {$old_audit['title']}");
+            }
             
             setFlashMessage('Audit updated successfully!', 'success');
             redirect('/modules/audits/list.php');

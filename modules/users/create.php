@@ -48,6 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $pdo->prepare("INSERT INTO users (full_name, username, email, password, role_id, status) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->execute([$full_name, $username, $email, $hashed_password, $role_id, $status]);
+                    $new_user_id = $pdo->lastInsertId();
+                    
+                    // Log user creation activity
+                    logActivity($_SESSION['user_id'], 'Created User', 'User', $new_user_id, "Created user {$username} ({$full_name})");
                     
                     setFlashMessage('User created successfully!', 'success');
                     redirect('/modules/users/list.php');

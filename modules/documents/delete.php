@@ -52,6 +52,9 @@ try {
             $stmt = $pdo->prepare("DELETE FROM documents WHERE id = ?");
             $stmt->execute([$document_id]);
             
+            // Log document deletion activity
+            logActivity($_SESSION['user_id'], 'Deleted Document', 'Document', $document_id, "Deleted document: {$document['document_name']}");
+            
             if (!isset($_SESSION['flash_message'])) {
                 setFlashMessage('Document deleted successfully!', 'success');
             }

@@ -37,6 +37,10 @@
             <i class="bi bi-list-check me-2"></i>
             <span class="sidebar-text">Checklist Templates</span>
         </a>
+        <a href="<?php echo BASE_URL; ?>/modules/logs/activity.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'logs/activity.php') !== false ? 'active' : ''; ?>">
+            <i class="bi bi-clock-history me-2"></i>
+            <span class="sidebar-text">Activity Log</span>
+        </a>
         <?php endif; ?>
         
         <a href="<?php echo BASE_URL; ?>/modules/users/profile.php" class="list-group-item list-group-item-action <?php echo strpos($_SERVER['PHP_SELF'], 'users/profile.php') !== false ? 'active' : ''; ?>">

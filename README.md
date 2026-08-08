@@ -1,8 +1,8 @@
-# Audit Management CMS - Phase 6
+# Audit Management CMS - Phase 7 (FINAL PHASE)
 
 A simple, professional Audit Management Content Management System built with vanilla PHP, MySQL, and Bootstrap 5.
 
-## Phase 6 Features
+## Features
 
 - **Authentication System**: Secure login/logout with session management
 - **User Management**: Admin-only CRUD operations for users
@@ -14,6 +14,8 @@ A simple, professional Audit Management Content Management System built with van
 - **Findings & Issues**: Create, track, resolve, and close audit findings with role-based workflow
 - **Documents / Evidence**: Upload, view, download, and manage audit evidence documents with secure file handling
 - **Audit Review & Report**: Admin can review audits, add comments/remarks, and complete/close audits with printable reports
+- **Activity Logging**: Comprehensive activity tracking across all modules for audit trails
+- **Real-time Dashboard**: Role-scoped statistics, recent audits, and activity feed
 - **Responsive Design**: Mobile-friendly with collapsible sidebar
 
 ## Tech Stack
@@ -36,6 +38,7 @@ A simple, professional Audit Management Content Management System built with van
    - `database/04_findings.sql`
    - `database/05_documents.sql`
    - `database/06_review.sql`
+   - `database/07_activity_log.sql`
 4. This will create the necessary tables and seed data
 
 ### 2. Configure Database Connection
@@ -106,6 +109,7 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
     - 04_findings.sql      # Findings schema
     - 05_documents.sql     # Documents schema
     - 06_review.sql        # Review schema (ALTER TABLE)
+    - 07_activity_log.sql  # Activity log schema
   /modules
     /auth
       - login.php           # Login page
@@ -141,8 +145,10 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
     /review
       - review.php          # Review audit (Admin only)
       - report.php          # View/print audit report
+    /logs
+      - activity.php        # Activity log viewer (Admin only)
   index.php                 # Entry point
-  dashboard.php             # Main dashboard
+  dashboard.php             # Main dashboard with statistics
   README.md                 # This file
 ```
 
@@ -156,9 +162,9 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
 
 ## User Roles
 
-1. **Admin**: Full access to all features including user management and audit management
-2. **Auditor**: Can create and manage audits assigned to them
-3. **Staff**: View-only access to audits where they are assigned as auditor
+1. **Admin**: Full access to all features including user management, audit management, activity log, and audit review
+2. **Auditor**: Can create and manage audits assigned to them, create findings, and fill checklists
+3. **Staff**: Can resolve findings assigned to them and view relevant audits
 
 ## Browser Compatibility
 
@@ -167,17 +173,11 @@ Open your browser and navigate to: `http://localhost/audit-mgt`
 - Edge
 - Safari
 
-## Future Phases
-
-This is Phase 6 of a 7-phase project. Future phases will include:
-
-- Phase 7: Dashboard & Activity Log
-
 ## Support
 
 For issues or questions, please refer to the project documentation or contact the development team.
 
 ---
 
-**Version**: Phase 6  
+**Version**: Phase 7 (FINAL)  
 **Last Updated**: 2026-08-08

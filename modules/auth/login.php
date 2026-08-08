@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['user_role'] = $user['role_name'];
                     $_SESSION['user_avatar'] = $user['avatar'];
                     
+                    // Log user login activity
+                    logActivity($user['id'], 'User Login', 'Auth', null, 'User logged in');
+                    
                     setFlashMessage('Welcome back, ' . htmlspecialchars($user['full_name']) . '!', 'success');
                     redirect('/dashboard.php');
                 }

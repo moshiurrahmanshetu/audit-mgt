@@ -91,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE audits SET auditor_comments = ?, final_remarks = ? WHERE id = ?");
             $stmt->execute([$auditor_comments ?: null, $final_remarks ?: null, $audit_id]);
             
+            // Log review notes save activity
+            logActivity($_SESSION['user_id'], 'Reviewed Audit', 'Review', $audit_id, "Added review notes for audit {$audit['audit_code']}");
+            
             setFlashMessage('Review notes saved successfully!', 'success');
             redirect('/modules/review/review.php?audit_id=' . $audit_id);
         } catch (PDOException $e) {
@@ -108,6 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("UPDATE audits SET auditor_comments = ?, final_remarks = ?, status = 'Completed', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?");
                 $stmt->execute([$auditor_comments ?: null, $final_remarks ?: null, $user['id'], $audit_id]);
+                
+                // Log audit completion activity
+                logActivity($_SESSION['user_id'], 'Completed Audit', 'Review', $audit_id, "Completed audit review: {$audit['audit_code']} - {$audit['title']}");
                 
                 setFlashMessage('Audit completed successfully!', 'success');
                 redirect('/modules/audits/view.php?id=' . $audit_id);

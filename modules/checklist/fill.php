@@ -86,6 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && hasAnyRole(['Admin', 'Auditor'])) {
             $stmt->execute([$response ?: null, $note ?: null, $item['id']]);
         }
         
+        // Log checklist update activity
+        logActivity($_SESSION['user_id'], 'Updated Checklist', 'Checklist', $audit_id, "Updated checklist for audit {$audit['audit_code']}");
+        
         setFlashMessage('Checklist saved successfully!', 'success');
         redirect('/modules/checklist/fill.php?audit_id=' . $audit_id);
     } catch (PDOException $e) {
